@@ -15,3 +15,16 @@ const getRndInteger = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 };
 
+getRndInteger(0, 5);
+
+/**
+ * Check that a string is no longer than the max length
+ * @param checkString The string which us needed to check
+ * @param maxLength The max length of string
+ * @return true if length is right, false if not
+ */
+const isRightLength = function (checkString, maxLength) {
+  return checkString.length <= maxLength;
+};
+
+isRightLength('Привет', 25);
