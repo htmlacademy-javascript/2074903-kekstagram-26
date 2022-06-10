@@ -25,3 +25,102 @@ const isRightLength = function (checkString, maxLength) {
 };
 
 isRightLength('Привет', 25);
+
+const MESSAGES = [
+  'Всё отлично!',
+  'В целом всё неплохо. Но не всё.',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+];
+
+const USER_NAMES = [
+  'Андрей',
+  'Анна',
+  'Анастасия',
+  'Евгений',
+  'Федор',
+  'Максим',
+  'Татьяна',
+  'Сергей',
+  'Петр',
+  'Вячеслав',
+  'Марьяна'
+];
+
+/**
+ * Get unique number from shuffle limit array
+ * @param poolSize max number in created array
+ * @return unique number from limit array
+ */
+const getCounter = function (poolSize) {
+  const newArray = Array.from({length: poolSize}, (_, i) => i + 1);
+  const getNext = function (array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array.pop();
+  };
+  return getNext(newArray);
+};
+
+/**
+ * Create the random string from elements
+ * @param length of new string for random description
+ * @return random string
+ */
+const makeDescription = function (length) {
+  let result = '';
+  const words = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const wordsLength = words.length;
+  for (let i = 0; i < length; i++ ) {
+    result += words.charAt(Math.floor(Math.random() * wordsLength));
+  }
+  return result;
+};
+
+/**
+ * Create messege for comments from array random join 1 or 2 sentences
+ * @return prepared message
+ */
+const createMessage = function () {
+  const messages = [];
+  const countSentences = getRndInteger(1, 2);
+  for (let i = 0; i < countSentences; i++) {
+    messages[i] = [MESSAGES[getRndInteger(0, MESSAGES.length - 1)]];
+  }
+  const message = messages.join(' ');
+  return message;
+};
+
+/**
+ * Create one of comments for photo
+ * @return object of comment
+ */
+const comment = function () {
+  return {
+    idComment: getCounter(1000),
+    avatar: `img/avatar-${getRndInteger(1, 6)}`,
+    message: createMessage(),
+    nameUser: USER_NAMES[getRndInteger(0, USER_NAMES.length - 1)]
+  };
+};
+
+/**
+ * Create one of photos for post
+ * @return object of photos
+ */
+const dataPhoto = function () {
+  const photoId = getCounter(25);
+  return {
+    id: photoId,
+    url: `photos/${photoId}.jpg`,
+    description: makeDescription(20),
+    likes: getRndInteger(15, 200),
+    comments: Array.from({length: getRndInteger(1, 6)}, comment)
+  };
+};
+
+const dataPhotos = Array.from({length: 25}, dataPhoto);
