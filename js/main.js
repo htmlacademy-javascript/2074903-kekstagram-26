@@ -126,4 +126,5 @@ const dataPhoto = function () {
   };
 };
 
+//eslint-disable-next-line
 const dataPhotos = Array.from({length: 25}, dataPhoto);
