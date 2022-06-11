@@ -127,4 +127,3 @@ const dataPhoto = function () {
 };
 
 const dataPhotos = Array.from({length: 25}, dataPhoto);
-console.log(dataPhotos);
