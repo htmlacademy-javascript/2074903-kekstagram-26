@@ -26,6 +26,20 @@ const isRightLength = function (checkString, maxLength) {
 
 isRightLength('Привет', 25);
 
+const NUMBER_ID_PHOTO = 25;
+const NUMBER_ID_COMMENT = 1000;
+
+const DESCRIPTIONS = [
+  'Превосходные детали!',
+  'Настоящее единение.',
+  'Что у него с лицом?',
+  'Лучше бы пошёл домой.',
+  'Лучший вид из окна сегодня.',
+  'Всегда знал, что чёрный мне к лицу.',
+  'Вклад в будущее, раз Тинькофф не разрешает.',
+  'Как неожиданно и приятно. Очень приятно!'
+]
+
 const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -66,8 +80,8 @@ const getIndex = function (poolSize) {
   return shuffle(newArray);
 };
 
-const newPhotoIds = getIndex(25);
-const newCommentIds = getIndex(1000);
+const newPhotoIds = getIndex(NUMBER_ID_PHOTO);
+const newCommentIds = getIndex(NUMBER_ID_COMMENT);
 
 /**
  * Create the random string from elements
