@@ -54,17 +54,20 @@ const USER_NAMES = [
  * @param poolSize max number in created array
  * @return unique number from limit array
  */
-const getCounter = function (poolSize) {
+const getIndex = function (poolSize) {
   const newArray = Array.from({length: poolSize}, (_, i) => i + 1);
-  const getNext = function (array) {
+  const shuffle = function (array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
-    return array.pop();
+    return newArray;
   };
-  return getNext(newArray);
+  return shuffle(newArray);
 };
+
+const newPhotoIds = getIndex(25);
+const newCommentIds = getIndex(1000);
 
 /**
  * Create the random string from elements
@@ -101,7 +104,7 @@ const createMessage = function () {
  */
 const comment = function () {
   return {
-    idComment: getCounter(1000),
+    idComment: newCommentIds.pop(),
     avatar: `img/avatar-${getRndInteger(1, 6)}`,
     message: createMessage(),
     nameUser: USER_NAMES[getRndInteger(0, USER_NAMES.length - 1)]
@@ -113,10 +116,10 @@ const comment = function () {
  * @return object of photos
  */
 const dataPhoto = function () {
-  const photoId = getCounter(25);
+  const newId = newPhotoIds.pop();
   return {
-    id: photoId,
-    url: `photos/${photoId}.jpg`,
+    id: newId,
+    url: `photos/${newId}.jpg`,
     description: makeDescription(20),
     likes: getRndInteger(15, 200),
     comments: Array.from({length: getRndInteger(1, 6)}, comment)
@@ -124,3 +127,4 @@ const dataPhoto = function () {
 };
 
 const dataPhotos = Array.from({length: 25}, dataPhoto);
+console.log(dataPhotos);
