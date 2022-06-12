@@ -95,9 +95,8 @@ const newCommentIds = getIndex(NUMBER_ID_COMMENT);
  * @returns prepared text
  */
 const createText = function (sentences) {
-  const sentencesIndex = getIndex(sentences.length - 1);
   const randomLength = getRndInteger(1, 2);
-  return sentencesIndex.slice(0, randomLength).join(' ');
+  return shuffle(sentences).slice(0, randomLength).join(' ');
 };
 
 /**
