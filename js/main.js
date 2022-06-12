@@ -1,18 +1,9 @@
 import { NUMBER_ID_COMMENT, NUMBER_ID_PHOTO, DESCRIPTIONS, MESSAGES, USER_NAMES } from './constants/generation.js';
-import { getRndInteger, shuffle, getIndex } from './functions/helpers.js';
+import { getRndInteger, getIndex } from './functions/helpers.js';
+import { createText } from './functions/generators.js';
 
 const newPhotoIds = getIndex(NUMBER_ID_PHOTO);
 const newCommentIds = getIndex(NUMBER_ID_COMMENT);
-
-/**
- * Create text from array random join 1 or 2 sentences
- * @param array of sentences to create the text
- * @returns prepared text
- */
-const createText = function (sentences) {
-  const randomLength = getRndInteger(1, 2);
-  return shuffle(sentences).slice(0, randomLength).join(' ');
-};
 
 /**
  * Create one of comments for photo
