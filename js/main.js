@@ -64,20 +64,26 @@ const USER_NAMES = [
 ];
 
 /**
+ * Shuffle indexes of some array
+ * @param indexes array with indexes
+ * @returns new array with shuffle indexes
+ */
+const shuffle = function (indexes) {
+  for (let i = indexes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
+  }
+  return indexes;
+};
+
+/**
  * Get unique number from shuffle limit array
  * @param poolSize max number in created array
  * @returns unique number from limit array
  */
 const getIndex = function (poolSize) {
-  const newArray = Array.from({length: poolSize}, (_, i) => i + 1);
-  const shuffle = function (array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return newArray;
-  };
-  return shuffle(newArray);
+  const newIndexes = Array.from({length: poolSize}, (_, i) => i + 1);
+  return shuffle(newIndexes);
 };
 
 const newPhotoIds = getIndex(NUMBER_ID_PHOTO);
@@ -86,23 +92,19 @@ const newCommentIds = getIndex(NUMBER_ID_COMMENT);
 /**
  * Create text from array random join 1 or 2 sentences
  * @param array of sentences to create the text
- * @returns prepared message
+ * @returns prepared text
  */
-const createText = function (array) {
-  const texts = [];
-  const countSentences = getRndInteger(1, 2);
-  for (let i = 0; i < countSentences; i++) {
-    texts[i] = [array[getRndInteger(0, MESSAGES.length - 1)]];
-  }
-  const text = texts.join(' ');
-  return text;
+const createText = function (sentences) {
+  const sentencesIndex = getIndex(sentences.length - 1);
+  const randomLength = getRndInteger(1, 2);
+  return sentencesIndex.slice(0, randomLength).join(' ');
 };
 
 /**
  * Create one of comments for photo
  * @returns object of comment
  */
-const comment = function () {
+const createComment = function () {
   return {
     idComment: newCommentIds.pop(),
     avatar: `img/avatar-${getRndInteger(1, 6)}`,
@@ -115,16 +117,16 @@ const comment = function () {
  * Create one of photos for post
  * @returns object of photos
  */
-const dataPhoto = function () {
+const createDataPhoto = function () {
   const newId = newPhotoIds.pop();
   return {
     id: newId,
     url: `photos/${newId}.jpg`,
     description: createText(DESCRIPTIONS),
     likes: getRndInteger(15, 200),
-    comments: Array.from({length: getRndInteger(1, 6)}, comment)
+    comments: Array.from({length: getRndInteger(1, 6)}, createComment)
   };
 };
 
 //eslint-disable-next-line
-const dataPhotos = Array.from({length: 25}, dataPhoto);
+const dataPhotos = Array.from({length: 25}, createDataPhoto);
