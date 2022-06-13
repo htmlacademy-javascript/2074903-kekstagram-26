@@ -29,6 +29,13 @@ const createId = () => {
   };
   return autoAddId;
 };
+/**
+ * Create an array of objects
+ * @param {int} lengthDatas length of the future array
+ * @param {function} fnData function which create an element in the future array
+ * @returns {array} prepared array of add elements with the length
+ */
+const generateDatas = (lengthDatas, fnData) => (Array.from({length: lengthDatas}, fnData));
 
 /**
  * Create one of comments for photo
@@ -51,7 +58,7 @@ const createDataPhoto = (newId) => ({
   url: `photos/${newId}.jpg`,
   description: createText(DESCRIPTIONS),
   likes: getRndInteger(MIN_COUNT_LIKES, MAX_COUNT_LIKES),
-  comments: Array.from({length: getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT)}, createComment)
+  comments: generateDatas(getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT), createComment)
 });
 
-export { createId, createDataPhoto };
+export { createId, createDataPhoto, generateDatas };

@@ -1,4 +1,4 @@
-const NUMBER_ID_PHOTO = 25;
+const NUMBER_PHOTO = 25;
 const MIN_INDEX_AVATAR = 1;
 const MAX_INDEX_AVATAR = 6;
 const MIN_COUNT_COMMENT = 1;
@@ -41,7 +41,7 @@ const USER_NAMES = [
 ];
 
 export {
-  NUMBER_ID_PHOTO,
+  NUMBER_PHOTO,
   DESCRIPTIONS,
   MESSAGES,
   USER_NAMES,
