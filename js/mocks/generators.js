@@ -1,4 +1,4 @@
-import { shuffle, getRndInteger } from './helpers.js';
+import { shuffle, getRndInteger } from '../functions/helpers.js';
 import { createCommentId } from 'js/main.js';
 import {
   DESCRIPTIONS,

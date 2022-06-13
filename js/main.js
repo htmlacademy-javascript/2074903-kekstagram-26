@@ -1,5 +1,5 @@
-import { NUMBER_PHOTO } from './constants/generation.js';
-import { createId, createDataPhoto, generateDatas } from './functions/generators.js';
+import { NUMBER_PHOTO } from './mocks/generation.js';
+import { createId, createDataPhoto, generateDatas } from './mocks/generators.js';
 
 const createCommentId = createId();
 
