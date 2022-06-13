@@ -1,4 +1,16 @@
-import { NUMBER_ID_COMMENT, NUMBER_ID_PHOTO, DESCRIPTIONS, MESSAGES, USER_NAMES } from './constants/generation.js';
+import {
+  NUMBER_ID_COMMENT,
+  NUMBER_ID_PHOTO,
+  DESCRIPTIONS,
+  MESSAGES,
+  USER_NAMES,
+  MIN_INDEX_AVATAR,
+  MAX_INDEX_AVATAR,
+  MIN_COUNT_COMMENT,
+  MAX_COUNT_COMMENT,
+  MIN_COUNT_LIKES,
+  MAX_COUNT_LIKES
+} from './constants/generation.js';
 import { getRndInteger, getIndex } from './functions/helpers.js';
 import { createText } from './functions/generators.js';
 
@@ -12,7 +24,7 @@ const newCommentIds = getIndex(NUMBER_ID_COMMENT);
 const createComment = function () {
   return {
     idComment: newCommentIds.pop(),
-    avatar: `img/avatar-${getRndInteger(1, 6)}`,
+    avatar: `img/avatar-${getRndInteger(MIN_INDEX_AVATAR, MAX_INDEX_AVATAR)}`,
     message: createText(MESSAGES),
     nameUser: USER_NAMES[getRndInteger(0, USER_NAMES.length - 1)]
   };
@@ -28,8 +40,8 @@ const createDataPhoto = function () {
     id: newId,
     url: `photos/${newId}.jpg`,
     description: createText(DESCRIPTIONS),
-    likes: getRndInteger(15, 200),
-    comments: Array.from({length: getRndInteger(1, 6)}, createComment)
+    likes: getRndInteger(MIN_COUNT_LIKES, MAX_COUNT_LIKES),
+    comments: Array.from({length: getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT)}, createComment)
   };
 };
 
