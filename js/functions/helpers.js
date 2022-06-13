@@ -25,14 +25,4 @@ const shuffle = function (indexes) {
   return indexes;
 };
 
-/**
- * Get unique number from shuffle limit array
- * @param poolSize max number in created array
- * @returns unique number from limit array
- */
-const getIndex = function (poolSize) {
-  const newIndexes = Array.from({length: poolSize}, (_, i) => i + 1);
-  return shuffle(newIndexes);
-};
-
-export { getRndInteger, shuffle, getIndex };
+export { getRndInteger, shuffle };

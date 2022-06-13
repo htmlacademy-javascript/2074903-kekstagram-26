@@ -1,5 +1,4 @@
-import { shuffle } from './helpers.js';
-import { getRndInteger } from './helpers';
+import { shuffle, getRndInteger } from './helpers.js';
 
 /**
  * Create text from array random join 1 or 2 sentences
@@ -11,4 +10,12 @@ const createText = function (sentences) {
   return shuffle(sentences).slice(0, randomLength).join(' ');
 };
 
-export { createText };
+const createId = function () {
+  let id = 1;
+  const autoAddId = function () {
+    return id++;
+  };
+  return autoAddId;
+};
+
+export { createText, createId };
