@@ -7,3 +7,4 @@ const createCommentId = createId();
 const dataPhotos = generateDatas(NUMBER_PHOTO, (_, i) => createDataPhoto(i + 1));
 
 export { createCommentId };
+debugger;

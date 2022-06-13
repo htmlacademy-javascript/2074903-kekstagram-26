@@ -1,5 +1,5 @@
 import { shuffle, getRndInteger } from '../functions/helpers.js';
-import { createCommentId } from 'js/main.js';
+import { createCommentId } from '../main.js';
 import {
   DESCRIPTIONS,
   MESSAGES,
@@ -10,7 +10,7 @@ import {
   MAX_COUNT_COMMENT,
   MIN_COUNT_LIKES,
   MAX_COUNT_LIKES
-} from 'js/constants/generation.js';
+} from './generation.js';
 
 /**
  * Create text from array random join 1 or 2 sentences
