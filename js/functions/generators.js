@@ -17,12 +17,12 @@ import {
  * @param array of sentences to create the text
  * @returns prepared text
  */
-const createText = function (sentences) {
+const createText = (sentences) => {
   const randomLength = getRndInteger(1, 2);
   return shuffle(sentences).slice(0, randomLength).join(' ');
 };
 
-const createId = function () {
+const createId = () => {
   let id = 1;
   const autoAddId = function () {
     return id++;
@@ -34,28 +34,24 @@ const createId = function () {
  * Create one of comments for photo
  * @returns {object} of comment
  */
-const createComment = function () {
-  return {
-    idComment: createCommentId(),
-    avatar: `img/avatar-${getRndInteger(MIN_INDEX_AVATAR, MAX_INDEX_AVATAR)}`,
-    message: createText(MESSAGES),
-    nameUser: USER_NAMES[getRndInteger(0, USER_NAMES.length - 1)]
-  };
-};
+const createComment = () => ({
+  idComment: createCommentId(),
+  avatar: `img/avatar-${getRndInteger(MIN_INDEX_AVATAR, MAX_INDEX_AVATAR)}`,
+  message: createText(MESSAGES),
+  nameUser: USER_NAMES[getRndInteger(0, USER_NAMES.length - 1)]
+});
 
 /**
  * Create one of photos for post
  * @param {int} newId take id for photo from generate function
  * @returns {object} of photos
  */
-const createDataPhoto = function (newId) {
-  return {
-    id: newId,
-    url: `photos/${newId}.jpg`,
-    description: createText(DESCRIPTIONS),
-    likes: getRndInteger(MIN_COUNT_LIKES, MAX_COUNT_LIKES),
-    comments: Array.from({length: getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT)}, createComment)
-  };
-};
+const createDataPhoto = (newId) => ({
+  id: newId,
+  url: `photos/${newId}.jpg`,
+  description: createText(DESCRIPTIONS),
+  likes: getRndInteger(MIN_COUNT_LIKES, MAX_COUNT_LIKES),
+  comments: Array.from({length: getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT)}, createComment)
+});
 
 export { createId, createDataPhoto };
