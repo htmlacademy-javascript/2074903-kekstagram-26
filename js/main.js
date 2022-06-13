@@ -1,27 +1,37 @@
-/**
- * Get random ceil number between min and max
- * Use reference - https://www.schoolsw3.com/js/js_random.php
- * @param fromInt min number of gap
- * @param toInt max number of gap
- * @return random number between this gap
-*/
-const getRndInteger = function (fromNum, toNum) {
-  const min = Math.ceil(Math.min(fromNum, toNum));
-  const max = Math.floor(Math.max(fromNum, toNum));
+import { NUMBER_ID_COMMENT, NUMBER_ID_PHOTO, DESCRIPTIONS, MESSAGES, USER_NAMES } from './constants/generation.js';
+import { getRndInteger, getIndex } from './functions/helpers.js';
+import { createText } from './functions/generators.js';
 
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-};
-
-getRndInteger(0, 5);
+const newPhotoIds = getIndex(NUMBER_ID_PHOTO);
+const newCommentIds = getIndex(NUMBER_ID_COMMENT);
 
 /**
- * Check that a string is no longer than the max length
- * @param checkString The string which us needed to check
- * @param maxLength The max length of string
- * @return true if length is right, false if not
+ * Create one of comments for photo
+ * @returns object of comment
  */
-const isRightLength = function (checkString, maxLength) {
-  return checkString.length <= maxLength;
+const createComment = function () {
+  return {
+    idComment: newCommentIds.pop(),
+    avatar: `img/avatar-${getRndInteger(1, 6)}`,
+    message: createText(MESSAGES),
+    nameUser: USER_NAMES[getRndInteger(0, USER_NAMES.length - 1)]
+  };
 };
 
-isRightLength('Привет', 25);
+/**
+ * Create one of photos for post
+ * @returns object of photos
+ */
+const createDataPhoto = function () {
+  const newId = newPhotoIds.pop();
+  return {
+    id: newId,
+    url: `photos/${newId}.jpg`,
+    description: createText(DESCRIPTIONS),
+    likes: getRndInteger(15, 200),
+    comments: Array.from({length: getRndInteger(1, 6)}, createComment)
+  };
+};
+
+//eslint-disable-next-line
+const dataPhotos = Array.from({length: 25}, createDataPhoto);
