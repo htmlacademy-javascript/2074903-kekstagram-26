@@ -1,5 +1,4 @@
 import { shuffle, getRndInteger } from '../functions/helpers.js';
-import { createCommentId } from '../main.js';
 import {
   DESCRIPTIONS,
   MESSAGES,
@@ -24,9 +23,7 @@ const createText = (sentences) => {
 
 const createId = () => {
   let id = 1;
-  const autoAddId = function () {
-    return id++;
-  };
+  const autoAddId = () => (id++);
   return autoAddId;
 };
 /**
@@ -35,6 +32,8 @@ const createId = () => {
  * @param {function} fnData function which create an element in the future array
  * @returns {array} prepared array of add elements with the length
  */
+
+const createCommentId = createId();
 const generateDatas = (lengthDatas, fnData) => (Array.from({length: lengthDatas}, fnData));
 
 /**
@@ -61,4 +60,4 @@ const createDataPhoto = (newId) => ({
   comments: generateDatas(getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT), createComment)
 });
 
-export { createId, createDataPhoto, generateDatas };
+export { createDataPhoto, generateDatas };
