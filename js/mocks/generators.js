@@ -8,33 +8,38 @@ import {
   MIN_COUNT_COMMENT,
   MAX_COUNT_COMMENT,
   MIN_COUNT_LIKES,
-  MAX_COUNT_LIKES
+  MAX_COUNT_LIKES,
+  MIN_SENTENCES,
+  MAX_SENTENCES
 } from './generation.js';
 
 /**
  * Create text from array random join 1 or 2 sentences
- * @param array of sentences to create the text
+ * @param {array} sentences - array of sentences to create the text
+ * @param {int} maxSentences max amount sentences in the single element
+ * @param {int} minSentences min amount sentences in the single element
  * @returns prepared text
  */
-const createText = (sentences) => {
-  const randomLength = getRndInteger(1, 2);
+const createText = (sentences, minSentences, maxSentences) => {
+  const randomLength = getRndInteger(minSentences, maxSentences);
   return shuffle(sentences).slice(0, randomLength).join(' ');
 };
 
 const createId = () => {
   let id = 1;
-  const autoAddId = () => (id++);
-  return autoAddId;
+  const getNextId = () => (id++);
+  return getNextId;
 };
-/**
- * Create an array of objects
- * @param {int} lengthDatas length of the future array
- * @param {function} fnData function which create an element in the future array
- * @returns {array} prepared array of add elements with the length
- */
 
 const createCommentId = createId();
-const generateDatas = (lengthDatas, fnData) => (Array.from({length: lengthDatas}, fnData));
+
+/**
+ * Create an array of objects with the concrete length
+ * @param {int} sumElements length of the future array
+ * @param {function} creatorSingleElement function which create an element in the future array
+ * @returns {array} prepared array of added elements with the length
+ */
+const createNewArray = (sumElements, creatorSingleElement) => (Array.from({length: sumElements}, creatorSingleElement));
 
 /**
  * Create one of comments for photo
@@ -43,7 +48,7 @@ const generateDatas = (lengthDatas, fnData) => (Array.from({length: lengthDatas}
 const createComment = () => ({
   idComment: createCommentId(),
   avatar: `img/avatar-${getRndInteger(MIN_INDEX_AVATAR, MAX_INDEX_AVATAR)}`,
-  message: createText(MESSAGES),
+  message: createText(MESSAGES, MIN_SENTENCES, MAX_SENTENCES),
   nameUser: USER_NAMES[getRndInteger(0, USER_NAMES.length - 1)]
 });
 
@@ -55,9 +60,9 @@ const createComment = () => ({
 const createDataPhoto = (newId) => ({
   id: newId,
   url: `photos/${newId}.jpg`,
-  description: createText(DESCRIPTIONS),
+  description: createText(DESCRIPTIONS, MIN_SENTENCES, MAX_SENTENCES),
   likes: getRndInteger(MIN_COUNT_LIKES, MAX_COUNT_LIKES),
-  comments: generateDatas(getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT), createComment)
+  comments: createNewArray(getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT), createComment)
 });
 
-export { createDataPhoto, generateDatas };
+export { createDataPhoto, createNewArray };

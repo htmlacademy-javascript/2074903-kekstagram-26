@@ -5,6 +5,8 @@ const MIN_COUNT_COMMENT = 1;
 const MAX_COUNT_COMMENT = 6;
 const MIN_COUNT_LIKES = 15;
 const MAX_COUNT_LIKES = 200;
+const MAX_SENTENCES = 2;
+const MIN_SENTENCES = 1;
 
 const DESCRIPTIONS = [
   'Превосходные детали!',
@@ -50,5 +52,7 @@ export {
   MIN_COUNT_COMMENT,
   MAX_COUNT_COMMENT,
   MIN_COUNT_LIKES,
-  MAX_COUNT_LIKES
+  MAX_COUNT_LIKES,
+  MIN_SENTENCES,
+  MAX_SENTENCES
 };

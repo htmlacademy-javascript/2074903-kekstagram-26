@@ -14,15 +14,15 @@ const getRndInteger = (fromNum, toNum) => {
 
 /**
  * Shuffle some array
- * @param {array} data array with indexes
- * @returns {array} new array with shuffle indexes
+ * @param {array} items any array (for example, with indexes)
+ * @returns {array} new array with shuffle elements
  */
-const shuffle = (data) => {
-  for (let i = data.length - 1; i > 0; i--) {
+const shuffle = (items) => {
+  for (let i = items.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [data[i], data[j]] = [data[j], data[i]];
+    [items[i], items[j]] = [items[j], items[i]];
   }
-  return data;
+  return items;
 };
 
 export { getRndInteger, shuffle };
