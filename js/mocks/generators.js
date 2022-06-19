@@ -47,7 +47,7 @@ const createNewArray = (sumElements, creatorSingleElement) => (Array.from({lengt
  */
 const createComment = () => ({
   idComment: createCommentId(),
-  avatar: `img/avatar-${getRndInteger(MIN_INDEX_AVATAR, MAX_INDEX_AVATAR)}`,
+  avatar: `img/avatar-${getRndInteger(MIN_INDEX_AVATAR, MAX_INDEX_AVATAR)}.svg`,
   message: createText(MESSAGES, MIN_SENTENCES, MAX_SENTENCES),
   nameUser: USER_NAMES[getRndInteger(0, USER_NAMES.length - 1)]
 });
