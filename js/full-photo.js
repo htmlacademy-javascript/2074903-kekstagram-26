@@ -3,16 +3,56 @@ import { photosContainer } from './photo-renderer.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 const previewPhotos = photosContainer.querySelectorAll('.picture');
+
+const commentsContainer = fullPhoto.querySelector('.social__comments');
+const defaultComments = commentsContainer.querySelectorAll('.social__comment');
+const commentsContainerFragment = document.createDocumentFragment();
+
 const hiddenCountComments = fullPhoto.querySelector('.social__comment-count');
 const hiddenLoaderComments = fullPhoto.querySelector('.comments-loader');
 const staticPageContent = document.querySelector('body');
+
 const buttonClose = fullPhoto.querySelector('.cancel');
 
+const addClasses = () => {
+  for (let i = 0; i < defaultComments.length; i++) {
+    defaultComments[i].classList.add('hidden');
+    //commentsContainer.removeChild(defaultComments[i]);
+  }
+  fullPhoto.classList.remove('hidden');
+  hiddenCountComments.classList.add('hidden');
+  hiddenLoaderComments.classList.add('hidden');
+  staticPageContent.classList.add('modal-open');
+};
+
+const removeAllAddedChildren = (parentElement, startedIndex) => {
+  const addedElements = parentElement.children;
+  while (addedElements[startedIndex]) {
+    parentElement.removeChild(addedElements[startedIndex]);
+  }
+};
+
 const removeClasses = () => {
+  for (let i = 0; i < defaultComments.length; i++) {
+    defaultComments[i].classList.remove('hidden');
+  }
   fullPhoto.classList.add('hidden');
   hiddenCountComments.classList.remove('hidden');
   hiddenLoaderComments.classList.remove('hidden');
   staticPageContent.classList.remove('modal-open');
+  //commentsContainerFragment.innerHTML = '';
+  removeAllAddedChildren(commentsContainer, defaultComments.length);
+};
+
+const exitFullMode = () => {
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      removeClasses();
+    }
+  });
+  buttonClose.addEventListener('click', () => {
+    removeClasses();
+  });
 };
 
 /*const addComment = (avatar, nameUser, message) => {
@@ -33,19 +73,12 @@ const removeClasses = () => {
 
 const addPreviewClickHandler = function (previewPhoto, dataPhoto) {
   previewPhoto.addEventListener('click', () => {
-    fullPhoto.classList.remove('hidden');
+    addClasses();
     fullPhoto.querySelector('.big-picture__img img').src = dataPhoto.url;
     fullPhoto.querySelector('.big-picture__img img').alt = 'Авторская фотография';
     fullPhoto.querySelector('.social__caption').textContent = dataPhoto.description;
     fullPhoto.querySelector('.likes-count').textContent = dataPhoto.likes;
     fullPhoto.querySelector('.comments-count').textContent = dataPhoto.comments.length;
-    const commentsContainer = fullPhoto.querySelector('.social__comments');
-    const defaultComments = commentsContainer.querySelectorAll('.social__comment');
-    for (let i = 0; i < defaultComments.length; i++) {
-      defaultComments[i].classList.add('hidden');
-      //commentsContainer.removeChild(defaultComments[i]);
-    }
-    const commentsContainerFragment = document.createDocumentFragment();
     dataPhoto.comments.forEach(({avatar, nameUser, message}) => {
       const commentElement = defaultComments[0].cloneNode(true);
       commentElement.classList.remove('hidden');
@@ -56,17 +89,7 @@ const addPreviewClickHandler = function (previewPhoto, dataPhoto) {
       commentsContainerFragment.append(commentElement);
     });
     commentsContainer.append(commentsContainerFragment);
-    hiddenCountComments.classList.add('hidden');
-    hiddenLoaderComments.classList.add('hidden');
-    staticPageContent.classList.add('modal-open');
-    document.addEventListener('keydown', (evt) => {
-      if (evt.key === 'Escape') {
-        removeClasses();
-      }
-    });
-    buttonClose.addEventListener('click', () => {
-      removeClasses();
-    });
+    exitFullMode();
   });
 };
 
