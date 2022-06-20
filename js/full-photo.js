@@ -2,9 +2,9 @@ import { dataPhotos } from './data.js';
 import { photosContainer } from './photo-renderer.js';
 
 const fullPhoto = document.querySelector('.big-picture');
-const previewPhotos = photosContainer.querySelectorAll('a.picture');
+const previewPhotos = photosContainer.querySelectorAll('.picture');
 
-const addComment = (avatar, nameUser, message) => {
+/*const addComment = (avatar, nameUser, message) => {
   const commentContainerTemplate = document.createElement('li');
   commentContainerTemplate.classList.add('social__comment');
   const commentImg = document.createElement('img');
@@ -18,11 +18,11 @@ const addComment = (avatar, nameUser, message) => {
   commentText.classList.add('social__text');
   commentContainerTemplate.append(commentText);
   commentText.textContent = message;
-};
+};*/
 
 const addPreviewClickHandler = function (previewPhoto, dataPhoto) {
   previewPhoto.addEventListener('click', () => {
-    fullPhoto.remove('hidden');
+    fullPhoto.classList.remove('hidden');
     fullPhoto.querySelector('.big-picture__img img').src = dataPhoto.url;
     fullPhoto.querySelector('.big-picture__img img').alt = 'Авторская фотография';
     fullPhoto.querySelector('.social__caption').textContent = dataPhoto.description;
@@ -31,11 +31,17 @@ const addPreviewClickHandler = function (previewPhoto, dataPhoto) {
     const commentsContainer = fullPhoto.querySelector('.social__comments');
     const defaultComments = commentsContainer.querySelectorAll('.social__comment');
     for (let i = 0; i < defaultComments.length; i++) {
-      commentsContainer.removeChild(defaultComments[i]);
+      defaultComments[i].classList.add('hidden');
+      //commentsContainer.removeChild(defaultComments[i]);
     }
     const commentsContainerFragment = document.createDocumentFragment();
     dataPhoto.comments.forEach(({avatar, nameUser, message}) => {
-      const commentElement = addComment(avatar, nameUser, message);
+      const commentElement = defaultComments[0].cloneNode(true);
+      commentElement.classList.remove('hidden');
+      commentElement.querySelector('img').src = avatar;
+      commentElement.querySelector('img').alt = nameUser;
+      commentElement.querySelector('p').textContent = message;
+      //const commentElement = addComment(avatar, nameUser, message);
       commentsContainerFragment.append(commentElement);
     });
     commentsContainer.append(commentsContainerFragment);
@@ -57,9 +63,9 @@ if (!fullPhoto.classList.contains('hidden')) {
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
       fullPhoto.classList.add('hidden');
-      hiddenCountComments.remove('hidden');
-      hiddenLoaderComments.remove('hidden');
-      staticPageContent.remove('modal-open');
+      hiddenCountComments.classList.remove('hidden');
+      hiddenLoaderComments.classList.remove('hidden');
+      staticPageContent.classList.remove('modal-open');
     }
   });
 }
