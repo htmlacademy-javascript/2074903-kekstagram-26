@@ -3,6 +3,9 @@ import { photosContainer } from './photo-renderer.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 const previewPhotos = photosContainer.querySelectorAll('.picture');
+const hiddenCountComments = fullPhoto.querySelector('.social__comment-count');
+const hiddenLoaderComments = fullPhoto.querySelector('.comments-loader');
+const staticPageContent = document.querySelector('body');
 
 /*const addComment = (avatar, nameUser, message) => {
   const commentContainerTemplate = document.createElement('li');
@@ -45,6 +48,17 @@ const addPreviewClickHandler = function (previewPhoto, dataPhoto) {
       commentsContainerFragment.append(commentElement);
     });
     commentsContainer.append(commentsContainerFragment);
+    hiddenCountComments.classList.add('hidden');
+    hiddenLoaderComments.classList.add('hidden');
+    staticPageContent.classList.add('modal-open');
+    document.addEventListener('keydown', (evt) => {
+      if (evt.key === 'Escape') {
+        fullPhoto.classList.add('hidden');
+        hiddenCountComments.classList.remove('hidden');
+        hiddenLoaderComments.classList.remove('hidden');
+        staticPageContent.classList.remove('modal-open');
+      }
+    });
   });
 };
 
@@ -52,11 +66,7 @@ for (let i = 0; i < previewPhotos.length; i++) {
   addPreviewClickHandler(previewPhotos[i], dataPhotos[i]);
 }
 
-const hiddenCountComments = fullPhoto.querySelector('.social__comment-count');
-const hiddenLoaderComments = fullPhoto.querySelector('.comments-loader');
-const staticPageContent = document.querySelector('body');
-
-if (!fullPhoto.classList.contains('hidden')) {
+/*if (!fullPhoto.classList.contains('hidden')) {
   hiddenCountComments.classList.add('hidden');
   hiddenLoaderComments.classList.add('hidden');
   staticPageContent.classList.add('modal-open');
@@ -68,4 +78,4 @@ if (!fullPhoto.classList.contains('hidden')) {
       staticPageContent.classList.remove('modal-open');
     }
   });
-}
+}*/
