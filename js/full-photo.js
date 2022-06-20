@@ -1,5 +1,6 @@
 import { dataPhotos } from './data.js';
 import { photosContainer } from './photo-renderer.js';
+import { removeAllAddedChildren } from './functions/managers-dom.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 const previewPhotos = photosContainer.querySelectorAll('.picture');
@@ -14,10 +15,9 @@ const staticPageContent = document.querySelector('body');
 
 const buttonClose = fullPhoto.querySelector('.cancel');
 
-const addClasses = () => {
+const changeOpenOverlay = () => {
   for (let i = 0; i < defaultComments.length; i++) {
     defaultComments[i].classList.add('hidden');
-    //commentsContainer.removeChild(defaultComments[i]);
   }
   fullPhoto.classList.remove('hidden');
   hiddenCountComments.classList.add('hidden');
@@ -25,14 +25,7 @@ const addClasses = () => {
   staticPageContent.classList.add('modal-open');
 };
 
-const removeAllAddedChildren = (parentElement, startedIndex) => {
-  const addedElements = parentElement.children;
-  while (addedElements[startedIndex]) {
-    parentElement.removeChild(addedElements[startedIndex]);
-  }
-};
-
-const removeClasses = () => {
+const changeCloseOverlay = () => {
   for (let i = 0; i < defaultComments.length; i++) {
     defaultComments[i].classList.remove('hidden');
   }
@@ -40,40 +33,23 @@ const removeClasses = () => {
   hiddenCountComments.classList.remove('hidden');
   hiddenLoaderComments.classList.remove('hidden');
   staticPageContent.classList.remove('modal-open');
-  //commentsContainerFragment.innerHTML = '';
   removeAllAddedChildren(commentsContainer, defaultComments.length);
 };
 
 const exitFullMode = () => {
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
-      removeClasses();
+      changeCloseOverlay();
     }
   });
   buttonClose.addEventListener('click', () => {
-    removeClasses();
+    changeCloseOverlay();
   });
 };
 
-/*const addComment = (avatar, nameUser, message) => {
-  const commentContainerTemplate = document.createElement('li');
-  commentContainerTemplate.classList.add('social__comment');
-  const commentImg = document.createElement('img');
-  commentContainerTemplate.append(commentImg);
-  commentImg.classList.add('social__picture');
-  commentImg.src = avatar;
-  commentImg.alt = nameUser;
-  commentImg.wigth = '35';
-  commentImg.height = '35';
-  const commentText = document.createElement('p');
-  commentText.classList.add('social__text');
-  commentContainerTemplate.append(commentText);
-  commentText.textContent = message;
-};*/
-
 const addPreviewClickHandler = function (previewPhoto, dataPhoto) {
   previewPhoto.addEventListener('click', () => {
-    addClasses();
+    changeOpenOverlay();
     fullPhoto.querySelector('.big-picture__img img').src = dataPhoto.url;
     fullPhoto.querySelector('.big-picture__img img').alt = 'Авторская фотография';
     fullPhoto.querySelector('.social__caption').textContent = dataPhoto.description;
@@ -85,7 +61,6 @@ const addPreviewClickHandler = function (previewPhoto, dataPhoto) {
       commentElement.querySelector('img').src = avatar;
       commentElement.querySelector('img').alt = nameUser;
       commentElement.querySelector('p').textContent = message;
-      //const commentElement = addComment(avatar, nameUser, message);
       commentsContainerFragment.append(commentElement);
     });
     commentsContainer.append(commentsContainerFragment);
@@ -96,17 +71,3 @@ const addPreviewClickHandler = function (previewPhoto, dataPhoto) {
 for (let i = 0; i < previewPhotos.length; i++) {
   addPreviewClickHandler(previewPhotos[i], dataPhotos[i]);
 }
-
-/*if (!fullPhoto.classList.contains('hidden')) {
-  hiddenCountComments.classList.add('hidden');
-  hiddenLoaderComments.classList.add('hidden');
-  staticPageContent.classList.add('modal-open');
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      fullPhoto.classList.add('hidden');
-      hiddenCountComments.classList.remove('hidden');
-      hiddenLoaderComments.classList.remove('hidden');
-      staticPageContent.classList.remove('modal-open');
-    }
-  });
-}*/
