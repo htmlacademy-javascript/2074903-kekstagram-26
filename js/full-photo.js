@@ -1,4 +1,5 @@
 import { removeAllAddedChildren } from './functions/managers-dom.js';
+import { photosContainer } from './photo-renderer.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 
@@ -94,11 +95,11 @@ const fillFullPhoto = (dataPhoto) => {
  * @param {object} container parent element of previews
  * @param {array} photoElements information of all photos which we can open
  */
-const openFullPhoto = (container, photoElements) => {
-  container.addEventListener('click', (evt) => {
+const openFullPhoto = (photoElements) => {
+  photosContainer.addEventListener('click', (evt) => {
     const previewPhoto = evt.target.closest('.picture');
     if (!previewPhoto) {return;}
-    if (!container.contains(previewPhoto)) {return;}
+    if (!photosContainer.contains(previewPhoto)) {return;}
     fillFullPhoto(photoElements[previewPhoto.dataset.index]);
   });
 };

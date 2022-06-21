@@ -10,7 +10,8 @@ import {
   MIN_COUNT_LIKES,
   MAX_COUNT_LIKES,
   MIN_SENTENCES,
-  MAX_SENTENCES
+  MAX_SENTENCES,
+  NUMBER_PHOTO
 } from './generation.js';
 
 /**
@@ -65,4 +66,6 @@ const createDataPhoto = (newId) => ({
   comments: createNewArray(getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT), createComment)
 });
 
-export { createDataPhoto, createNewArray };
+const createDataPhotos = () => (createNewArray(NUMBER_PHOTO, (_, i) => createDataPhoto(i + 1)));
+
+export { createDataPhotos };
