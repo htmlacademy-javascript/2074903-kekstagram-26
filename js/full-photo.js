@@ -43,14 +43,24 @@ const changeCloseOverlay = () => {
  * Close overlay view by several ways: push escape and click cancel button
  */
 const exitFullMode = () => {
-  document.addEventListener('keydown', (evt) => {
+  let closePushEsc = () => {};
+  let closeClickButton = () => {};
+  const removeEventListeners = () => {
+    document.removeEventListener('keydown', closePushEsc);
+    buttonClose.removeEventListener('click', closeClickButton);
+  };
+  closePushEsc = (evt) => {
     if (evt.key === 'Escape') {
       changeCloseOverlay();
     }
-  });
-  buttonClose.addEventListener('click', () => {
+    removeEventListeners();
+  };
+  closeClickButton = () => {
     changeCloseOverlay();
-  });
+    removeEventListeners();
+  };
+  document.addEventListener('keydown', closePushEsc);
+  buttonClose.addEventListener('click', closeClickButton);
 };
 
 /**
