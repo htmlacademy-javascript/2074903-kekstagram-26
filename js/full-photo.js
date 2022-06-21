@@ -3,7 +3,6 @@ import { photosContainer } from './photo-renderer.js';
 import { removeAllAddedChildren } from './functions/managers-dom.js';
 
 const fullPhoto = document.querySelector('.big-picture');
-const previewPhotos = photosContainer.querySelectorAll('.picture');
 
 const commentsContainer = fullPhoto.querySelector('.social__comments');
 const defaultComments = commentsContainer.querySelectorAll('.social__comment');
@@ -47,27 +46,31 @@ const exitFullMode = () => {
   });
 };
 
-const addPreviewClickHandler = function (previewPhoto, dataPhoto) {
-  previewPhoto.addEventListener('click', () => {
-    changeOpenOverlay();
-    fullPhoto.querySelector('.big-picture__img img').src = dataPhoto.url;
-    fullPhoto.querySelector('.big-picture__img img').alt = 'Авторская фотография';
-    fullPhoto.querySelector('.social__caption').textContent = dataPhoto.description;
-    fullPhoto.querySelector('.likes-count').textContent = dataPhoto.likes;
-    fullPhoto.querySelector('.comments-count').textContent = dataPhoto.comments.length;
-    dataPhoto.comments.forEach(({avatar, nameUser, message}) => {
-      const commentElement = defaultComments[0].cloneNode(true);
-      commentElement.classList.remove('hidden');
-      commentElement.querySelector('img').src = avatar;
-      commentElement.querySelector('img').alt = nameUser;
-      commentElement.querySelector('p').textContent = message;
-      commentsContainerFragment.append(commentElement);
-    });
-    commentsContainer.append(commentsContainerFragment);
-    exitFullMode();
+const fillFullPhoto = (dataPhoto) => {
+  changeOpenOverlay();
+
+  fullPhoto.querySelector('.big-picture__img img').src = dataPhoto.url;
+  fullPhoto.querySelector('.big-picture__img img').alt = 'Авторская фотография';
+  fullPhoto.querySelector('.social__caption').textContent = dataPhoto.description;
+  fullPhoto.querySelector('.likes-count').textContent = dataPhoto.likes;
+  fullPhoto.querySelector('.comments-count').textContent = dataPhoto.comments.length;
+
+  dataPhoto.comments.forEach(({avatar, nameUser, message}) => {
+    const commentElement = defaultComments[0].cloneNode(true);
+    commentElement.classList.remove('hidden');
+    commentElement.querySelector('img').src = avatar;
+    commentElement.querySelector('img').alt = nameUser;
+    commentElement.querySelector('p').textContent = message;
+    commentsContainerFragment.append(commentElement);
   });
+  commentsContainer.append(commentsContainerFragment);
+
+  exitFullMode();
 };
 
-for (let i = 0; i < previewPhotos.length; i++) {
-  addPreviewClickHandler(previewPhotos[i], dataPhotos[i]);
-}
+photosContainer.addEventListener('click', (evt) => {
+  const previewPhoto = evt.target.closest('.picture');
+  if (!previewPhoto) {return;}
+  if (!photosContainer.contains(previewPhoto)) {return;}
+  fillFullPhoto(dataPhotos[previewPhoto.dataset.index]);
+});
