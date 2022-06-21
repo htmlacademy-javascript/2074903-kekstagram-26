@@ -1,5 +1,3 @@
-import { dataPhotos } from './data.js';
-import { photosContainer } from './photo-renderer.js';
 import { removeAllAddedChildren } from './functions/managers-dom.js';
 
 const fullPhoto = document.querySelector('.big-picture');
@@ -14,6 +12,9 @@ const staticPageContent = document.querySelector('body');
 
 const buttonClose = fullPhoto.querySelector('.cancel');
 
+/**
+ * Changes classes of some DOM elements when we open overlay view
+ */
 const changeOpenOverlay = () => {
   for (let i = 0; i < defaultComments.length; i++) {
     defaultComments[i].classList.add('hidden');
@@ -24,6 +25,9 @@ const changeOpenOverlay = () => {
   staticPageContent.classList.add('modal-open');
 };
 
+/**
+ * Changes classes of some DOM elements when we close overlay view
+ */
 const changeCloseOverlay = () => {
   for (let i = 0; i < defaultComments.length; i++) {
     defaultComments[i].classList.remove('hidden');
@@ -35,6 +39,9 @@ const changeCloseOverlay = () => {
   removeAllAddedChildren(commentsContainer, defaultComments.length);
 };
 
+/**
+ * Close overlay view by several ways: push escape and click cancel button
+ */
 const exitFullMode = () => {
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
@@ -46,6 +53,10 @@ const exitFullMode = () => {
   });
 };
 
+/**
+ * Fill html layout information from concrete photo which we want to open
+ * @param {object} dataPhoto photo element which be needed to open overlay
+ */
 const fillFullPhoto = (dataPhoto) => {
   changeOpenOverlay();
 
@@ -68,9 +79,18 @@ const fillFullPhoto = (dataPhoto) => {
   exitFullMode();
 };
 
-photosContainer.addEventListener('click', (evt) => {
-  const previewPhoto = evt.target.closest('.picture');
-  if (!previewPhoto) {return;}
-  if (!photosContainer.contains(previewPhoto)) {return;}
-  fillFullPhoto(dataPhotos[previewPhoto.dataset.index]);
-});
+/**
+ * Add EventListener parent element of previews
+ * @param {object} container parent element of previews
+ * @param {array} photoElements information of all photos which we can open
+ */
+const openFullPhoto = (container, photoElements) => {
+  container.addEventListener('click', (evt) => {
+    const previewPhoto = evt.target.closest('.picture');
+    if (!previewPhoto) {return;}
+    if (!container.contains(previewPhoto)) {return;}
+    fillFullPhoto(photoElements[previewPhoto.dataset.index]);
+  });
+};
+
+export { openFullPhoto };

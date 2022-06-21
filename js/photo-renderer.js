@@ -1,24 +1,26 @@
-import { dataPhotos } from './data.js';
-
 const photosContainer = document.querySelector('.pictures');
 
 const randomPhotoTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const photoElements = dataPhotos;
+/**
+ * Add photos from db to page
+ * @param {array} photoElements array with photos which need to be added
+ */
+const addPreviews = (photoElements) => {
+  const photosContainerFragment = document.createDocumentFragment();
 
-const photosContainerFragment = document.createDocumentFragment();
+  photoElements.forEach(({id, url, likes, comments}) => {
+    const photoElement = randomPhotoTemplate.cloneNode(true);
+    photoElement.dataset.index = id - 1;
+    photoElement.querySelector('.picture__img').src = url;
+    photoElement.querySelector('.picture__likes').textContent = likes;
+    photoElement.querySelector('.picture__comments').textContent = comments.length;
+    photosContainerFragment.append(photoElement);
+  });
 
-photoElements.forEach(({id, url, likes, comments}) => {
-  const photoElement = randomPhotoTemplate.cloneNode(true);
-  photoElement.dataset.index = id - 1;
-  photoElement.querySelector('.picture__img').src = url;
-  photoElement.querySelector('.picture__likes').textContent = likes;
-  photoElement.querySelector('.picture__comments').textContent = comments.length;
-  photosContainerFragment.append(photoElement);
-});
+  photosContainer.append(photosContainerFragment);
+};
 
-photosContainer.append(photosContainerFragment);
-
-export { photosContainer };
+export { addPreviews, photosContainer };
