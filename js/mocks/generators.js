@@ -39,7 +39,8 @@ const createCommentId = createId();
  * @param {function} creatorSingleElement function which create an element in the future array
  * @returns {array} prepared array of added elements with the length
  */
-const createNewArray = (sumElements, creatorSingleElement) => (Array.from({length: sumElements}, creatorSingleElement));
+const createNewArray = (sumElements, creatorSingleElement) =>
+  (Array.from({length: sumElements}, creatorSingleElement));
 
 /**
  * Create one of comments for photo
@@ -47,7 +48,7 @@ const createNewArray = (sumElements, creatorSingleElement) => (Array.from({lengt
  */
 const createComment = () => ({
   idComment: createCommentId(),
-  avatar: `img/avatar-${getRndInteger(MIN_INDEX_AVATAR, MAX_INDEX_AVATAR)}`,
+  avatar: `img/avatar-${getRndInteger(MIN_INDEX_AVATAR, MAX_INDEX_AVATAR)}.svg`,
   message: createText(MESSAGES, MIN_SENTENCES, MAX_SENTENCES),
   nameUser: USER_NAMES[getRndInteger(0, USER_NAMES.length - 1)]
 });
@@ -65,4 +66,7 @@ const createDataPhoto = (newId) => ({
   comments: createNewArray(getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT), createComment)
 });
 
-export { createDataPhoto, createNewArray };
+const createDataPhotos = (sumElements) =>
+  (createNewArray(sumElements, (_, i) => createDataPhoto(i + 1)));
+
+export { createDataPhotos };

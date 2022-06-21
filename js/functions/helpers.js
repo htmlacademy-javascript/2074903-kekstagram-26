@@ -25,4 +25,11 @@ const shuffle = (items) => {
   return items;
 };
 
-export { getRndInteger, shuffle };
+/**
+ * Checks that the key 'escape' was pushed
+ * @param {*} evt on event handler
+ * @returns {boolean} pushed or not
+ */
+const isEscape = (evt) => (evt.key === 'Escape');
+
+export { getRndInteger, shuffle, isEscape };
