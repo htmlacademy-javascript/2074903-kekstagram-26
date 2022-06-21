@@ -10,8 +10,7 @@ import {
   MIN_COUNT_LIKES,
   MAX_COUNT_LIKES,
   MIN_SENTENCES,
-  MAX_SENTENCES,
-  NUMBER_PHOTO
+  MAX_SENTENCES
 } from './generation.js';
 
 /**
@@ -40,7 +39,8 @@ const createCommentId = createId();
  * @param {function} creatorSingleElement function which create an element in the future array
  * @returns {array} prepared array of added elements with the length
  */
-const createNewArray = (sumElements, creatorSingleElement) => (Array.from({length: sumElements}, creatorSingleElement));
+const createNewArray = (sumElements, creatorSingleElement) =>
+  (Array.from({length: sumElements}, creatorSingleElement));
 
 /**
  * Create one of comments for photo
@@ -66,6 +66,7 @@ const createDataPhoto = (newId) => ({
   comments: createNewArray(getRndInteger(MIN_COUNT_COMMENT, MAX_COUNT_COMMENT), createComment)
 });
 
-const createDataPhotos = () => (createNewArray(NUMBER_PHOTO, (_, i) => createDataPhoto(i + 1)));
+const createDataPhotos = (sumElements) =>
+  (createNewArray(sumElements, (_, i) => createDataPhoto(i + 1)));
 
 export { createDataPhotos };

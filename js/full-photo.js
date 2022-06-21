@@ -1,5 +1,6 @@
 import { removeAllAddedChildren } from './functions/managers-dom.js';
 import { photosContainer } from './photo-renderer.js';
+import { isEscape } from './functions/helpers.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 
@@ -17,9 +18,9 @@ const buttonClose = fullPhoto.querySelector('.cancel');
  * Changes classes of some DOM elements when we open overlay view
  */
 const changeOpenOverlay = () => {
-  for (let i = 0; i < defaultComments.length; i++) {
-    defaultComments[i].classList.add('hidden');
-  }
+  defaultComments.forEach((defaultComment) => {
+    defaultComment.classList.add('hidden');
+  });
   fullPhoto.classList.remove('hidden');
   hiddenCountComments.classList.add('hidden');
   hiddenLoaderComments.classList.add('hidden');
@@ -30,9 +31,9 @@ const changeOpenOverlay = () => {
  * Changes classes of some DOM elements when we close overlay view
  */
 const changeCloseOverlay = () => {
-  for (let i = 0; i < defaultComments.length; i++) {
-    defaultComments[i].classList.remove('hidden');
-  }
+  defaultComments.forEach((defaultComment) => {
+    defaultComment.classList.remove('hidden');
+  });
   fullPhoto.classList.add('hidden');
   hiddenCountComments.classList.remove('hidden');
   hiddenLoaderComments.classList.remove('hidden');
@@ -44,24 +45,25 @@ const changeCloseOverlay = () => {
  * Close overlay view by several ways: push escape and click cancel button
  */
 const exitFullMode = () => {
-  let closePushEsc = () => {};
-  let closeClickButton = () => {};
+  let onEscCloseOverlay = () => {};
+  let onClickCloseOverlay = () => {};
   const removeEventListeners = () => {
-    document.removeEventListener('keydown', closePushEsc);
-    buttonClose.removeEventListener('click', closeClickButton);
+    document.removeEventListener('keydown', onEscCloseOverlay);
+    buttonClose.removeEventListener('click', onClickCloseOverlay);
   };
-  closePushEsc = (evt) => {
-    if (evt.key === 'Escape') {
+  onEscCloseOverlay = (evt) => {
+    if (isEscape(evt)) {
+      evt.preventDefault();
       changeCloseOverlay();
     }
     removeEventListeners();
   };
-  closeClickButton = () => {
+  onClickCloseOverlay = () => {
     changeCloseOverlay();
     removeEventListeners();
   };
-  document.addEventListener('keydown', closePushEsc);
-  buttonClose.addEventListener('click', closeClickButton);
+  document.addEventListener('keydown', onEscCloseOverlay);
+  buttonClose.addEventListener('click', onClickCloseOverlay);
 };
 
 /**
