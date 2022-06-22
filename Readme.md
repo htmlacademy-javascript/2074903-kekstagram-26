@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Ольга Маринина](https://up.htmlacademy.ru/javascript/26/user/2074903).
-* Наставник: [Владимир Якушкин](https://htmlacademy.ru/profile/id126208).
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
 
 ---
 
