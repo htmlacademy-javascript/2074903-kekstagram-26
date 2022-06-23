@@ -57,7 +57,7 @@
 
                   <!-- Изменение глубины эффекта, накладываемого на изображение -->
                   <fieldset class="img-upload__effect-level  effect-level">
-                    <input class="effect-level__value" type="number" step="any" name="effect-level" value="100%">
+                    <input class="effect-level__value" type="number" step="any" name="effect-level" value="1">
                     <div class="effect-level__slider"></div>
                   </fieldset>
 
@@ -116,10 +116,10 @@
                 <!-- Добавление хэш-тегов и комментария к изображению -->
                 <fieldset class="img-upload__text text">
                   <div class="img-upload__field-wrapper">
-                    <input class="text__hashtags" name="hashtags" placeholder="#ХэшТег" value="">
+                    <input type="text" class="text__hashtags" name="hashtags" placeholder="#ХэшТег" value="">
                   </div>
                   <div class="img-upload__field-wrapper">
-                    <textarea class="text__description" name="description" placeholder="Ваш комментарий..." value=""></textarea>
+                    <textarea type="text" class="text__description" name="description" placeholder="Ваш комментарий..." value=""></textarea>
                   </div>
                 </fieldset>
 
