@@ -1,6 +1,7 @@
 import { removeAllAddedChildren } from './functions/managers-dom.js';
 import { photosContainer } from './photo-renderer.js';
 import { isEscape } from './functions/helpers.js';
+import { removeEventListeners } from './functions/managers-dom.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 
@@ -42,14 +43,6 @@ const changeCloseOverlay = () => {
 };
 
 /**
- * Delete eventListeners to close open full photo
- */
-function removeEventListeners () {
-  document.removeEventListener('keydown', onEscCloseOverlay);
-  buttonClose.removeEventListener('click', onClickCloseOverlay);
-}
-
-/**
  * Close open full photo by press to escape
  * @param {*} evt on event handler
  */
@@ -58,7 +51,7 @@ function onEscCloseOverlay (evt) {
     evt.preventDefault();
     changeCloseOverlay();
   }
-  removeEventListeners();
+  removeEventListeners(buttonClose, onEscCloseOverlay, onClickCloseOverlay);
 }
 
 /**
@@ -66,7 +59,7 @@ function onEscCloseOverlay (evt) {
  */
 function onClickCloseOverlay () {
   changeCloseOverlay();
-  removeEventListeners();
+  removeEventListeners(buttonClose, onEscCloseOverlay, onClickCloseOverlay);
 }
 
 /**
