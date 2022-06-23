@@ -8,6 +8,11 @@ const staticPageContent = document.querySelector('body');
 //const addedPhotoPreview = changePhotoForm.querySelector('.img-upload__preview');
 const buttonClose = uploadPhotoForm.querySelector('#upload-cancel');
 
+const addChangesFormClose = () => {
+  changePhotoForm.classList.add('hidden');
+  staticPageContent.classList.remove('modal-open');
+  uploadPhotoForm.reset();
+};
 /**
  * Close open full photo by press to escape
  * @param {*} evt on event handler
@@ -15,8 +20,7 @@ const buttonClose = uploadPhotoForm.querySelector('#upload-cancel');
 function onEscCloseForm (evt) {
   if (isEscape(evt)) {
     evt.preventDefault();
-    changePhotoForm.classList.add('hidden');
-    staticPageContent.classList.remove('modal-open');
+    addChangesFormClose();
   }
   removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
 }
@@ -25,8 +29,7 @@ function onEscCloseForm (evt) {
  * Close open full photo by press to close button
  */
 function onClickCloseForm () {
-  changePhotoForm.classList.add('hidden');
-  staticPageContent.classList.remove('modal-open');
+  addChangesFormClose();
   removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
 }
 
