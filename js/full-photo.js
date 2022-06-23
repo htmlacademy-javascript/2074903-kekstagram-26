@@ -42,26 +42,37 @@ const changeCloseOverlay = () => {
 };
 
 /**
+ * Delete eventListeners to close open full photo
+ */
+function removeEventListeners () {
+  document.removeEventListener('keydown', onEscCloseOverlay);
+  buttonClose.removeEventListener('click', onClickCloseOverlay);
+}
+
+/**
+ * Close open full photo by press to escape
+ * @param {*} evt on event handler
+ */
+function onEscCloseOverlay (evt) {
+  if (isEscape(evt)) {
+    evt.preventDefault();
+    changeCloseOverlay();
+  }
+  removeEventListeners();
+}
+
+/**
+ * Close open full photo by press to close button
+ */
+function onClickCloseOverlay () {
+  changeCloseOverlay();
+  removeEventListeners();
+}
+
+/**
  * Close overlay view by several ways: push escape and click cancel button
  */
 const exitFullMode = () => {
-  let onEscCloseOverlay = () => {};
-  let onClickCloseOverlay = () => {};
-  const removeEventListeners = () => {
-    document.removeEventListener('keydown', onEscCloseOverlay);
-    buttonClose.removeEventListener('click', onClickCloseOverlay);
-  };
-  onEscCloseOverlay = (evt) => {
-    if (isEscape(evt)) {
-      evt.preventDefault();
-      changeCloseOverlay();
-    }
-    removeEventListeners();
-  };
-  onClickCloseOverlay = () => {
-    changeCloseOverlay();
-    removeEventListeners();
-  };
   document.addEventListener('keydown', onEscCloseOverlay);
   buttonClose.addEventListener('click', onClickCloseOverlay);
 };
