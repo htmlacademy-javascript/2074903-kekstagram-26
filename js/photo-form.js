@@ -1,5 +1,6 @@
 import { isEscape } from './functions/helpers.js';
 import { removeEventListeners } from './functions/managers-dom.js';
+import { isRightLength } from './functions/validaters.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const fieldUploadPhoto = uploadPhotoForm.querySelector('#upload-file');
@@ -7,6 +8,18 @@ const changePhotoForm = uploadPhotoForm.querySelector('.img-upload__overlay');
 const staticPageContent = document.querySelector('body');
 //const addedPhotoPreview = changePhotoForm.querySelector('.img-upload__preview');
 const buttonClose = uploadPhotoForm.querySelector('#upload-cancel');
+const hashtagFiled = changePhotoForm.querySelector('.text__hashtags');
+const lengthComment = 140;
+const commentField = changePhotoForm.querySelector('.text__description');
+
+/*const pristine = new Pristine(orderForm, {
+  classTo: 'form__item',
+  errorClass: 'form__item--invalid',
+  successClass: 'form__item--valid',
+  errorTextParent: 'form__item',
+  errorTextTag: 'span',
+  errorTextClass: 'form__error'
+});*/
 
 const addChangesFormClose = () => {
   changePhotoForm.classList.add('hidden');
@@ -33,12 +46,31 @@ function onClickCloseForm () {
   removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
 }
 
+function listenExitClick () {
+  buttonClose.addEventListener('click', onClickCloseForm);
+  hashtagFiled.removeEventListener('focusin', listenExitClick);
+  hashtagFiled.removeEventListener('focusout', listenExit);
+  commentField.removeEventListener('focusin', listenExitClick);
+  commentField.removeEventListener('focusout', listenExit);
+}
+
+function listenExit () {
+  document.addEventListener('keydown', onEscCloseForm);
+  buttonClose.addEventListener('click', onClickCloseForm);
+  hashtagFiled.removeEventListener('focusin', listenExitClick);
+  hashtagFiled.removeEventListener('focusout', listenExit);
+  commentField.removeEventListener('focusin', listenExitClick);
+  commentField.removeEventListener('focusout', listenExit);
+}
+
 /**
  * Close overlay view by several ways: push escape and click cancel button
  */
 const exitForm = () => {
-  document.addEventListener('keydown', onEscCloseForm);
-  buttonClose.addEventListener('click', onClickCloseForm);
+  hashtagFiled.addEventListener('focusin', listenExitClick);
+  hashtagFiled.addEventListener('focusout', listenExit);
+  commentField.addEventListener('focusin', listenExitClick);
+  commentField.addEventListener('focusout', listenExit);
 };
 
 fieldUploadPhoto.addEventListener('change', () => {
@@ -86,3 +118,24 @@ const getHashtagErrorMessage = (value) => {
   }
   return hashtags.length <= 5 ? null : 'Нельзя указать больше пяти хэш-тегов';
 };
+
+pristine.addValidator(
+  hashtagFiled,
+  validateHashtag,
+  getHashtagErrorMessage
+);
+
+const validateComment = (value) => (isRightLength(value, lengthComment));
+const getCommentErrorMessage = (value) =>
+  (isRightLength(value, lengthComment) ? null : 'Комментарий не может быть больше 140 символов');
+
+pristine.addValidator(
+  commentField,
+  validateComment,
+  getCommentErrorMessage
+);
+
+/*orderForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  pristine.validate();
+});*/

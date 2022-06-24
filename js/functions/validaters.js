@@ -6,4 +6,4 @@
  */
 const isRightLength = (checkString, maxLength) => (checkString.length <= maxLength);
 
-isRightLength('Привет', 25);
+export { isRightLength };
