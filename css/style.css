@@ -750,6 +750,15 @@ main {
           transform: translateY(1px);
 }
 
+.img-upload__field-wrapper--invalid {
+  color: red;
+}
+
+.img-upload__error {
+  display: block;
+  margin: -10px 0px 20px;
+}
+
 
 /* Окно полноэкранного просмотра изображения
    ========================================================================== */
