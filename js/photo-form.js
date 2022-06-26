@@ -34,8 +34,8 @@ const addChangesFormClose = () => {
  */
 function onEscCloseForm (evt) {
   if (isEscape(evt) &&
-    uploadPhotoForm.activeElement !== hashtagFiled &&
-    uploadPhotoForm.activeElement !== commentField) {
+    document.activeElement !== hashtagFiled &&
+    document.activeElement !== commentField) {
     evt.preventDefault();
     addChangesFormClose();
     removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
