@@ -1,11 +1,10 @@
 import { isEscape } from './functions/helpers.js';
 import { removeEventListeners } from './functions/managers-dom.js';
 import {
-  isValidLengthStr,
+  isValidLength,
   isValidHashtagSymbols,
   isValidHashtagLength,
   isValidUniqueHashtags,
-  isValidCountHashtags
 } from './functions/validaters.js';
 import {
   LENGTH_COMMENT,
@@ -32,12 +31,17 @@ const pristine = new Pristine(uploadPhotoForm, {
   errorTextClass: 'img-upload__error'
 });
 
+/**
+ * Add different changes during closing the form: add/remove classes,
+ * reset the form and pristine
+ */
 const addChangesFormClose = () => {
   changePhotoForm.classList.add('hidden');
   staticPageContent.classList.remove('modal-open');
   uploadPhotoForm.reset();
   pristine.reset();
 };
+
 /**
  * Close open full photo by press to escape
  * @param {*} evt on event handler
@@ -68,25 +72,40 @@ const exitForm = () => {
   buttonClose.addEventListener('click', onClickCloseForm);
 };
 
-fieldUploadPhoto.addEventListener('change', () => {
-  changePhotoForm.classList.remove('hidden');
-  staticPageContent.classList.add('modal-open');
-  //addedPhotoPreview.src = fieldUploadPhoto.value;
-  exitForm();
-});
+/**
+ * Add different changes during opening the form: add/remove classes
+ */
+const openFormUploadPhoto = () => {
+  fieldUploadPhoto.addEventListener('change', () => {
+    changePhotoForm.classList.remove('hidden');
+    staticPageContent.classList.add('modal-open');
+    //addedPhotoPreview.src = fieldUploadPhoto.value;
+    exitForm();
+  });
+};
 
 const regexCheckHashtag = /^#[A-Za-zА-Яа-яЁё0-9]{1,100}$/;
 
+/**
+ * Validate all conditions for hashtag field
+ * @param {string} value value of hashtag field
+ * @returns {boolean} if all validates are successful we receive true and false if not
+ */
 const validateHashtag = (value) => {
   const hashtags = value.split(' ');
   const validHashtags = [];
   validHashtags.push(isValidHashtagSymbols(hashtags, regexCheckHashtag));
   validHashtags.push(isValidHashtagLength(hashtags, MAX_HASHTAG_LENGTH, MIN_HASHTAG_LENGTH));
   validHashtags.push(isValidUniqueHashtags(hashtags));
-  validHashtags.push(isValidCountHashtags(hashtags, COUNT_HASHTAGS));
+  validHashtags.push(isValidLength(hashtags, COUNT_HASHTAGS));
   return !validHashtags.includes(false);
 };
 
+/**
+ * Create the text of errors for validating conditions of hashtag field
+ * @param {string} value value of hashtag field
+ * @returns {string} with all actual errors for this field
+ */
 const getHashtagErrorMessage = (value) => {
   const hashtags = value.split(' ');
   const errorMessages = [];
@@ -99,29 +118,44 @@ const getHashtagErrorMessage = (value) => {
   if (!isValidUniqueHashtags(hashtags)) {
     errorMessages.push('Ваши хэштеги повторяются, проверьте: хэштеги нечувствительны к регистру');
   }
-  if (!isValidCountHashtags(hashtags, COUNT_HASHTAGS)) {
+  if (!isValidLength(hashtags, COUNT_HASHTAGS)) {
     errorMessages.push(`Нельзя указать больше ${COUNT_HASHTAGS} хэштегов`);
   }
   return errorMessages.join('<br>');
 };
 
-const validateComment = (value) => (isValidLengthStr(value, LENGTH_COMMENT));
+/**
+ * Validate all conditions of comment field
+ * @param {string} value value of comment field
+ * @returns {boolean} if all validates are successful we receive true and false if not
+ */
+const validateComment = (value) => (isValidLength(value, LENGTH_COMMENT));
+
+/**
+ * Create the text of errors for validating conditions of comment field
+ * @param {string} value value of comment field
+ * @returns {string} with actual error for this field
+ */
 const getCommentErrorMessage = (value) =>
-  (isValidLengthStr(value, LENGTH_COMMENT) ? null : 'Комментарий не может быть больше 140 символов');
+  (isValidLength(value, LENGTH_COMMENT) ? null : 'Комментарий не может быть больше 140 символов');
 
-pristine.addValidator(
-  hashtagFiled,
-  validateHashtag,
-  getHashtagErrorMessage
-);
+const validateCheckedFields = () => {
+  pristine.addValidator(
+    hashtagFiled,
+    validateHashtag,
+    getHashtagErrorMessage
+  );
 
-pristine.addValidator(
-  commentField,
-  validateComment,
-  getCommentErrorMessage
-);
+  pristine.addValidator(
+    commentField,
+    validateComment,
+    getCommentErrorMessage
+  );
 
-uploadPhotoForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+  uploadPhotoForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    pristine.validate();
+  });
+};
+
+export { openFormUploadPhoto, validateCheckedFields };

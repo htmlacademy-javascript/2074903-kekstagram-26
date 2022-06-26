@@ -98,7 +98,6 @@ const fillFullPhoto = (dataPhoto) => {
 
 /**
  * Add EventListener parent element of previews
- * @param {object} container parent element of previews
  * @param {array} photoElements information of all photos which we can open
  */
 const openFullPhoto = (photoElements) => {
