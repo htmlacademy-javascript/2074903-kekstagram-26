@@ -23,10 +23,20 @@ const buttonClose = uploadPhotoForm.querySelector('#upload-cancel');
 const hashtagFiled = changePhotoForm.querySelector('.text__hashtags');
 const commentField = changePhotoForm.querySelector('.text__description');
 
+const pristine = new Pristine(uploadPhotoForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorClass: 'img-upload__field-wrapper--invalid',
+  successClass: 'img-upload__field-wrapper--valid',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextTag: 'span',
+  errorTextClass: 'img-upload__error'
+});
+
 const addChangesFormClose = () => {
   changePhotoForm.classList.add('hidden');
   staticPageContent.classList.remove('modal-open');
   uploadPhotoForm.reset();
+  pristine.reset();
 };
 /**
  * Close open full photo by press to escape
@@ -95,24 +105,15 @@ const getHashtagErrorMessage = (value) => {
   return errorMessages.join('<br>');
 };
 
-const pristine = new Pristine(uploadPhotoForm, {
-  classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--invalid',
-  successClass: 'img-upload__field-wrapper--valid',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextTag: 'span',
-  errorTextClass: 'img-upload__error'
-});
+const validateComment = (value) => (isValidLengthStr(value, LENGTH_COMMENT));
+const getCommentErrorMessage = (value) =>
+  (isValidLengthStr(value, LENGTH_COMMENT) ? null : 'Комментарий не может быть больше 140 символов');
 
 pristine.addValidator(
   hashtagFiled,
   validateHashtag,
   getHashtagErrorMessage
 );
-
-const validateComment = (value) => (isValidLengthStr(value, LENGTH_COMMENT));
-const getCommentErrorMessage = (value) =>
-  (isValidLengthStr(value, LENGTH_COMMENT) ? null : 'Комментарий не может быть больше 140 символов');
 
 pristine.addValidator(
   commentField,
