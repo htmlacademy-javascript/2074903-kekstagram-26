@@ -2,6 +2,7 @@ import { removeAllAddedChildren } from './functions/managers-dom.js';
 import { photosContainer } from './photo-renderer.js';
 import { isEscape } from './functions/helpers.js';
 import { removeEventListeners } from './functions/managers-dom.js';
+import { EVERY_PACK_COMMENTS } from './constants.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 
@@ -9,8 +10,8 @@ const commentsContainer = fullPhoto.querySelector('.social__comments');
 const defaultComments = commentsContainer.querySelectorAll('.social__comment');
 const commentsContainerFragment = document.createDocumentFragment();
 
-const hiddenCountComments = fullPhoto.querySelector('.social__comment-count');
-const hiddenLoaderComments = fullPhoto.querySelector('.comments-loader');
+const countOpenComments = fullPhoto.querySelector('.social__comment-count');
+const buttonLoaderComments = fullPhoto.querySelector('.comments-loader');
 const staticPageContent = document.querySelector('body');
 
 const buttonClose = fullPhoto.querySelector('.cancel');
@@ -23,8 +24,6 @@ const changeOpenOverlay = () => {
     defaultComment.classList.add('hidden');
   });
   fullPhoto.classList.remove('hidden');
-  hiddenCountComments.classList.add('hidden');
-  hiddenLoaderComments.classList.add('hidden');
   staticPageContent.classList.add('modal-open');
 };
 
@@ -36,8 +35,6 @@ const changeCloseOverlay = () => {
     defaultComment.classList.remove('hidden');
   });
   fullPhoto.classList.add('hidden');
-  hiddenCountComments.classList.remove('hidden');
-  hiddenLoaderComments.classList.remove('hidden');
   staticPageContent.classList.remove('modal-open');
   removeAllAddedChildren(commentsContainer, defaultComments.length);
 };
@@ -91,7 +88,27 @@ const fillFullPhoto = (dataPhoto) => {
     commentElement.querySelector('p').textContent = message;
     commentsContainerFragment.append(commentElement);
   });
-  commentsContainer.append(commentsContainerFragment);
+
+  const allNewComments = commentsContainerFragment.querySelectorAll('.social__comment');
+
+  const loadNewComments = (start) => {
+    allNewComments.splice(0, start);
+    if (EVERY_PACK_COMMENTS > allNewComments.length) {
+      for (let i = 0; i < EVERY_PACK_COMMENTS; i++) {
+        commentsContainer.append(allNewComments[i]);
+      }
+      countOpenComments.textContent = `${start + EVERY_PACK_COMMENTS} из ${fullPhoto.querySelector('.comments-count').textContent} комментариев`;
+      return start + EVERY_PACK_COMMENTS;
+    }
+    for (let i = 0; i < allNewComments.length; i++) {
+      commentsContainer.append(allNewComments[i]);
+    }
+    countOpenComments.textContent = `${start + allNewComments.length} из ${fullPhoto.querySelector('.comments-count').textContent} комментариев`;
+    return start + allNewComments.length;
+  };
+
+  loadNewComments(0);
+  buttonLoaderComments.addEventListener('click', loadNewComments(countOpenComments.textContent));
 
   exitFullMode();
 };
