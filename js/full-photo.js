@@ -2,7 +2,7 @@ import { removeAllAddedChildren } from './functions/managers-dom.js';
 import { photosContainer } from './photo-renderer.js';
 import { isEscape } from './functions/helpers.js';
 import { removeEventListeners } from './functions/managers-dom.js';
-import { EVERY_PACK_COMMENTS } from './constants.js';
+import { COUNT_COMMENTS_PER_PAGE } from './constants.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 
@@ -78,7 +78,7 @@ const fillFullPhoto = (dataPhoto) => {
   fullPhoto.querySelector('.big-picture__img img').alt = 'Авторская фотография';
   fullPhoto.querySelector('.social__caption').textContent = dataPhoto.description;
   fullPhoto.querySelector('.likes-count').textContent = dataPhoto.likes;
-  fullPhoto.querySelector('.comments-count').textContent = dataPhoto.comments.length;
+  //fullPhoto.querySelector('.comments-count').textContent = dataPhoto.comments.length;
 
   dataPhoto.comments.forEach(({avatar, nameUser, message}) => {
     const commentElement = defaultComments[0].cloneNode(true);
@@ -88,27 +88,40 @@ const fillFullPhoto = (dataPhoto) => {
     commentElement.querySelector('p').textContent = message;
     commentsContainerFragment.append(commentElement);
   });
-
   const allNewComments = commentsContainerFragment.querySelectorAll('.social__comment');
 
-  const loadNewComments = (start) => {
-    allNewComments.splice(0, start);
-    if (EVERY_PACK_COMMENTS > allNewComments.length) {
-      for (let i = 0; i < EVERY_PACK_COMMENTS; i++) {
-        commentsContainer.append(allNewComments[i]);
-      }
-      countOpenComments.textContent = `${start + EVERY_PACK_COMMENTS} из ${fullPhoto.querySelector('.comments-count').textContent} комментариев`;
-      return start + EVERY_PACK_COMMENTS;
-    }
-    for (let i = 0; i < allNewComments.length; i++) {
-      commentsContainer.append(allNewComments[i]);
-    }
-    countOpenComments.textContent = `${start + allNewComments.length} из ${fullPhoto.querySelector('.comments-count').textContent} комментариев`;
-    return start + allNewComments.length;
+  const givePageNumber = () => {
+    let page = 0;
+    const getNextPage = () => (page++);
+    return getNextPage;
   };
 
-  loadNewComments(0);
-  buttonLoaderComments.addEventListener('click', loadNewComments(countOpenComments.textContent));
+  const addNewPage = givePageNumber();
+
+  const addNewComments = () => {
+    const curPage = addNewPage();
+    const countRemainingComments = dataPhoto.comments.length - (curPage * COUNT_COMMENTS_PER_PAGE);
+    const countExpectedComments = (curPage + 1) * COUNT_COMMENTS_PER_PAGE;
+    if (countRemainingComments >= COUNT_COMMENTS_PER_PAGE) {
+      for (let i = curPage * COUNT_COMMENTS_PER_PAGE; i < countExpectedComments; i++) {
+        commentsContainer.append(allNewComments[i]);
+      }
+      countOpenComments.textContent = `${countExpectedComments} из ${dataPhoto.comments.length} комментариев`;
+    }
+    if (countRemainingComments > 0 && countRemainingComments < COUNT_COMMENTS_PER_PAGE) {
+      for (let i = curPage * COUNT_COMMENTS_PER_PAGE; i < dataPhoto.comments.length; i++) {
+        commentsContainer.append(allNewComments[i]);
+      }
+      countOpenComments.textContent = `${curPage * COUNT_COMMENTS_PER_PAGE + countRemainingComments} из ${dataPhoto.comments.length} комментариев`;
+      buttonLoaderComments.removeEventListener('click', addNewComments);
+    }
+    if (countRemainingComments === 0) {
+      buttonLoaderComments.removeEventListener('click', addNewComments);
+    }
+  };
+
+  addNewComments();
+  buttonLoaderComments.addEventListener('click', addNewComments);
 
   exitFullMode();
 };
