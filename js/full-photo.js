@@ -1,6 +1,7 @@
 import { removeAllAddedChildren } from './functions/managers-dom.js';
 import { photosContainer } from './photo-renderer.js';
 import { isEscape } from './functions/helpers.js';
+import { removeEventListeners } from './functions/managers-dom.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 
@@ -42,26 +43,29 @@ const changeCloseOverlay = () => {
 };
 
 /**
+ * Close open full photo by press to escape
+ * @param {*} evt on event handler
+ */
+function onEscCloseOverlay (evt) {
+  if (isEscape(evt)) {
+    evt.preventDefault();
+    changeCloseOverlay();
+  }
+  removeEventListeners(buttonClose, onEscCloseOverlay, onClickCloseOverlay);
+}
+
+/**
+ * Close open full photo by press to close button
+ */
+function onClickCloseOverlay () {
+  changeCloseOverlay();
+  removeEventListeners(buttonClose, onEscCloseOverlay, onClickCloseOverlay);
+}
+
+/**
  * Close overlay view by several ways: push escape and click cancel button
  */
 const exitFullMode = () => {
-  let onEscCloseOverlay = () => {};
-  let onClickCloseOverlay = () => {};
-  const removeEventListeners = () => {
-    document.removeEventListener('keydown', onEscCloseOverlay);
-    buttonClose.removeEventListener('click', onClickCloseOverlay);
-  };
-  onEscCloseOverlay = (evt) => {
-    if (isEscape(evt)) {
-      evt.preventDefault();
-      changeCloseOverlay();
-    }
-    removeEventListeners();
-  };
-  onClickCloseOverlay = () => {
-    changeCloseOverlay();
-    removeEventListeners();
-  };
   document.addEventListener('keydown', onEscCloseOverlay);
   buttonClose.addEventListener('click', onClickCloseOverlay);
 };
@@ -94,7 +98,6 @@ const fillFullPhoto = (dataPhoto) => {
 
 /**
  * Add EventListener parent element of previews
- * @param {object} container parent element of previews
  * @param {array} photoElements information of all photos which we can open
  */
 const openFullPhoto = (photoElements) => {

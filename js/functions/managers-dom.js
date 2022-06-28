@@ -10,4 +10,15 @@ const removeAllAddedChildren = (parentElement, startedIndex) => {
   }
 };
 
-export { removeAllAddedChildren };
+/**
+ * Remove eventListeners
+ * @param {object} button with push on which we remove eventListeners
+ * @param {callback} onPush function with actions when we push come key
+ * @param {callback} onClick function with actions when we click some button
+ */
+const removeEventListeners = (button, onPush, onClick) => {
+  document.removeEventListener('keydown', onPush);
+  button.removeEventListener('click', onClick);
+};
+
+export { removeAllAddedChildren, removeEventListeners };
