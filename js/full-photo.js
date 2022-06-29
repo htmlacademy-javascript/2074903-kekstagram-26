@@ -2,6 +2,7 @@ import { removeAllAddedChildren } from './functions/managers-dom.js';
 import { photosContainer } from './photo-renderer.js';
 import { isEscape } from './functions/helpers.js';
 import { removeEventListeners } from './functions/managers-dom.js';
+import { COUNT_COMMENTS_PER_PAGE } from './constants.js';
 
 const fullPhoto = document.querySelector('.big-picture');
 
@@ -9,8 +10,8 @@ const commentsContainer = fullPhoto.querySelector('.social__comments');
 const defaultComments = commentsContainer.querySelectorAll('.social__comment');
 const commentsContainerFragment = document.createDocumentFragment();
 
-const hiddenCountComments = fullPhoto.querySelector('.social__comment-count');
-const hiddenLoaderComments = fullPhoto.querySelector('.comments-loader');
+const countOpenComments = fullPhoto.querySelector('.social__comment-count');
+const buttonLoaderComments = fullPhoto.querySelector('.comments-loader');
 const staticPageContent = document.querySelector('body');
 
 const buttonClose = fullPhoto.querySelector('.cancel');
@@ -23,8 +24,6 @@ const changeOpenOverlay = () => {
     defaultComment.classList.add('hidden');
   });
   fullPhoto.classList.remove('hidden');
-  hiddenCountComments.classList.add('hidden');
-  hiddenLoaderComments.classList.add('hidden');
   staticPageContent.classList.add('modal-open');
 };
 
@@ -36,8 +35,6 @@ const changeCloseOverlay = () => {
     defaultComment.classList.remove('hidden');
   });
   fullPhoto.classList.add('hidden');
-  hiddenCountComments.classList.remove('hidden');
-  hiddenLoaderComments.classList.remove('hidden');
   staticPageContent.classList.remove('modal-open');
   removeAllAddedChildren(commentsContainer, defaultComments.length);
 };
@@ -70,6 +67,12 @@ const exitFullMode = () => {
   buttonClose.addEventListener('click', onClickCloseOverlay);
 };
 
+const givePageNumber = () => {
+  let page = 0;
+  const getNextPage = () => (page++);
+  return getNextPage;
+};
+
 /**
  * Fill html layout information from concrete photo which we want to open
  * @param {object} dataPhoto photo element which be needed to open overlay
@@ -81,7 +84,7 @@ const fillFullPhoto = (dataPhoto) => {
   fullPhoto.querySelector('.big-picture__img img').alt = 'Авторская фотография';
   fullPhoto.querySelector('.social__caption').textContent = dataPhoto.description;
   fullPhoto.querySelector('.likes-count').textContent = dataPhoto.likes;
-  fullPhoto.querySelector('.comments-count').textContent = dataPhoto.comments.length;
+  //fullPhoto.querySelector('.comments-count').textContent = dataPhoto.comments.length;
 
   dataPhoto.comments.forEach(({avatar, nameUser, message}) => {
     const commentElement = defaultComments[0].cloneNode(true);
@@ -91,7 +94,36 @@ const fillFullPhoto = (dataPhoto) => {
     commentElement.querySelector('p').textContent = message;
     commentsContainerFragment.append(commentElement);
   });
-  commentsContainer.append(commentsContainerFragment);
+  const allNewComments = commentsContainerFragment.querySelectorAll('.social__comment');
+
+  const addNewPage = givePageNumber();
+
+  const onClickAddNewComments = () => {
+    buttonLoaderComments.classList.remove('hidden');
+    const curPage = addNewPage();
+    const countRemainingComments = dataPhoto.comments.length - (curPage * COUNT_COMMENTS_PER_PAGE);
+    const countExpectedComments = (curPage + 1) * COUNT_COMMENTS_PER_PAGE;
+    if (countRemainingComments >= COUNT_COMMENTS_PER_PAGE) {
+      for (let i = curPage * COUNT_COMMENTS_PER_PAGE; i < countExpectedComments; i++) {
+        commentsContainer.append(allNewComments[i]);
+      }
+      countOpenComments.textContent = `${countExpectedComments} из ${dataPhoto.comments.length} комментариев`;
+      if (countRemainingComments === COUNT_COMMENTS_PER_PAGE) {
+        buttonLoaderComments.classList.add('hidden');
+      }
+    }
+    if (countRemainingComments > 0 && countRemainingComments < COUNT_COMMENTS_PER_PAGE) {
+      for (let i = curPage * COUNT_COMMENTS_PER_PAGE; i < dataPhoto.comments.length; i++) {
+        commentsContainer.append(allNewComments[i]);
+      }
+      countOpenComments.textContent = `${curPage * COUNT_COMMENTS_PER_PAGE + countRemainingComments} из ${dataPhoto.comments.length} комментариев`;
+      buttonLoaderComments.removeEventListener('click', onClickAddNewComments);
+      buttonLoaderComments.classList.add('hidden');
+    }
+  };
+
+  onClickAddNewComments();
+  buttonLoaderComments.addEventListener('click', onClickAddNewComments);
 
   exitFullMode();
 };
@@ -100,7 +132,7 @@ const fillFullPhoto = (dataPhoto) => {
  * Add EventListener parent element of previews
  * @param {array} photoElements information of all photos which we can open
  */
-const openFullPhoto = (photoElements) => {
+const addOpenFullPhotoHandler = (photoElements) => {
   photosContainer.addEventListener('click', (evt) => {
     const previewPhoto = evt.target.closest('.picture');
     if (!previewPhoto) {return;}
@@ -109,4 +141,4 @@ const openFullPhoto = (photoElements) => {
   });
 };
 
-export { openFullPhoto };
+export { addOpenFullPhotoHandler};
