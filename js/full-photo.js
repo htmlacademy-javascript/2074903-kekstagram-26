@@ -99,6 +99,7 @@ const fillFullPhoto = (dataPhoto) => {
   const addNewPage = givePageNumber();
 
   const onClickAddNewComments = () => {
+    buttonLoaderComments.classList.remove('hidden');
     const curPage = addNewPage();
     const countRemainingComments = dataPhoto.comments.length - (curPage * COUNT_COMMENTS_PER_PAGE);
     const countExpectedComments = (curPage + 1) * COUNT_COMMENTS_PER_PAGE;
@@ -107,6 +108,9 @@ const fillFullPhoto = (dataPhoto) => {
         commentsContainer.append(allNewComments[i]);
       }
       countOpenComments.textContent = `${countExpectedComments} из ${dataPhoto.comments.length} комментариев`;
+      if (countRemainingComments === COUNT_COMMENTS_PER_PAGE) {
+        buttonLoaderComments.classList.add('hidden');
+      }
     }
     if (countRemainingComments > 0 && countRemainingComments < COUNT_COMMENTS_PER_PAGE) {
       for (let i = curPage * COUNT_COMMENTS_PER_PAGE; i < dataPhoto.comments.length; i++) {
@@ -114,9 +118,7 @@ const fillFullPhoto = (dataPhoto) => {
       }
       countOpenComments.textContent = `${curPage * COUNT_COMMENTS_PER_PAGE + countRemainingComments} из ${dataPhoto.comments.length} комментариев`;
       buttonLoaderComments.removeEventListener('click', onClickAddNewComments);
-    }
-    if (countRemainingComments === 0) {
-      buttonLoaderComments.removeEventListener('click', onClickAddNewComments);
+      buttonLoaderComments.classList.add('hidden');
     }
   };
 
