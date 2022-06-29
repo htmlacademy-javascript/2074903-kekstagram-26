@@ -1,17 +1,18 @@
-import { isEscape } from './functions/helpers.js';
-import { removeEventListeners } from './functions/managers-dom.js';
+import { isEscape } from '../functions/helpers.js';
+import { removeEventListeners } from '../functions/managers-dom.js';
+import { onClickButtonsScale } from './scale-controle.js';
 import {
   isValidLength,
   isValidHashtagSymbols,
   isValidHashtagLength,
   isValidUniqueHashtags,
-} from './functions/validaters.js';
+} from '../functions/validaters.js';
 import {
   LENGTH_COMMENT,
   COUNT_HASHTAGS,
   MAX_HASHTAG_LENGTH,
   MIN_HASHTAG_LENGTH
-} from './constants.js';
+} from '../constants.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const fieldUploadPhoto = uploadPhotoForm.querySelector('#upload-file');
@@ -21,6 +22,14 @@ const staticPageContent = document.querySelector('body');
 const buttonClose = uploadPhotoForm.querySelector('#upload-cancel');
 const hashtagFiled = changePhotoForm.querySelector('.text__hashtags');
 const commentField = changePhotoForm.querySelector('.text__description');
+
+const buttonScalePhotoBigger = changePhotoForm.querySelector('.scale__control--bigger');
+const buttonScalePhotoSmaller = changePhotoForm.querySelector('.scale__control--smaller');
+
+const changeScalePhotoPreview = () => {
+  buttonScalePhotoBigger.addEventListener('click', onClickButtonsScale);
+  buttonScalePhotoSmaller.addEventListener('click', onClickButtonsScale);
+};
 
 const pristine = new Pristine(uploadPhotoForm, {
   classTo: 'img-upload__field-wrapper',
@@ -53,6 +62,8 @@ function onEscCloseForm (evt) {
     evt.preventDefault();
     addChangesFormClose();
     removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
+    buttonScalePhotoBigger.removeEventListener('click', onClickButtonsScale);
+    buttonScalePhotoSmaller.removeEventListener('click', onClickButtonsScale);
   }
 }
 
@@ -62,6 +73,8 @@ function onEscCloseForm (evt) {
 function onClickCloseForm () {
   addChangesFormClose();
   removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
+  buttonScalePhotoBigger.removeEventListener('click', onClickButtonsScale);
+  buttonScalePhotoSmaller.removeEventListener('click', onClickButtonsScale);
 }
 
 /**
@@ -79,6 +92,7 @@ const addOpenFormUploadPhotoHandler = () => {
   fieldUploadPhoto.addEventListener('change', () => {
     changePhotoForm.classList.remove('hidden');
     staticPageContent.classList.add('modal-open');
+    changeScalePhotoPreview();
     //addedPhotoPreview.src = fieldUploadPhoto.value;
     exitForm();
   });
