@@ -75,7 +75,7 @@ const exitForm = () => {
 /**
  * Add different changes during opening the form: add/remove classes
  */
-const openFormUploadPhoto = () => {
+const addOpenFormUploadPhotoHandler = () => {
   fieldUploadPhoto.addEventListener('change', () => {
     changePhotoForm.classList.remove('hidden');
     staticPageContent.classList.add('modal-open');
@@ -139,7 +139,7 @@ const validateComment = (value) => (isValidLength(value, LENGTH_COMMENT));
 const getCommentErrorMessage = (value) =>
   (isValidLength(value, LENGTH_COMMENT) ? null : 'Комментарий не может быть больше 140 символов');
 
-const validateCheckedFields = () => {
+const addPristineValidatorsFromFields = () => {
   pristine.addValidator(
     hashtagFiled,
     validateHashtag,
@@ -158,4 +158,4 @@ const validateCheckedFields = () => {
   });
 };
 
-export { openFormUploadPhoto, validateCheckedFields };
+export { addOpenFormUploadPhotoHandler, addPristineValidatorsFromFields };

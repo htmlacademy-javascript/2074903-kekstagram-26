@@ -67,6 +67,12 @@ const exitFullMode = () => {
   buttonClose.addEventListener('click', onClickCloseOverlay);
 };
 
+const givePageNumber = () => {
+  let page = 0;
+  const getNextPage = () => (page++);
+  return getNextPage;
+};
+
 /**
  * Fill html layout information from concrete photo which we want to open
  * @param {object} dataPhoto photo element which be needed to open overlay
@@ -90,15 +96,9 @@ const fillFullPhoto = (dataPhoto) => {
   });
   const allNewComments = commentsContainerFragment.querySelectorAll('.social__comment');
 
-  const givePageNumber = () => {
-    let page = 0;
-    const getNextPage = () => (page++);
-    return getNextPage;
-  };
-
   const addNewPage = givePageNumber();
 
-  const addNewComments = () => {
+  const onClickAddNewComments = () => {
     const curPage = addNewPage();
     const countRemainingComments = dataPhoto.comments.length - (curPage * COUNT_COMMENTS_PER_PAGE);
     const countExpectedComments = (curPage + 1) * COUNT_COMMENTS_PER_PAGE;
@@ -113,15 +113,15 @@ const fillFullPhoto = (dataPhoto) => {
         commentsContainer.append(allNewComments[i]);
       }
       countOpenComments.textContent = `${curPage * COUNT_COMMENTS_PER_PAGE + countRemainingComments} из ${dataPhoto.comments.length} комментариев`;
-      buttonLoaderComments.removeEventListener('click', addNewComments);
+      buttonLoaderComments.removeEventListener('click', onClickAddNewComments);
     }
     if (countRemainingComments === 0) {
-      buttonLoaderComments.removeEventListener('click', addNewComments);
+      buttonLoaderComments.removeEventListener('click', onClickAddNewComments);
     }
   };
 
-  addNewComments();
-  buttonLoaderComments.addEventListener('click', addNewComments);
+  onClickAddNewComments();
+  buttonLoaderComments.addEventListener('click', onClickAddNewComments);
 
   exitFullMode();
 };
@@ -130,7 +130,7 @@ const fillFullPhoto = (dataPhoto) => {
  * Add EventListener parent element of previews
  * @param {array} photoElements information of all photos which we can open
  */
-const openFullPhoto = (photoElements) => {
+const addOpenFullPhotoHandler = (photoElements) => {
   photosContainer.addEventListener('click', (evt) => {
     const previewPhoto = evt.target.closest('.picture');
     if (!previewPhoto) {return;}
@@ -139,4 +139,4 @@ const openFullPhoto = (photoElements) => {
   });
 };
 
-export { openFullPhoto };
+export { addOpenFullPhotoHandler};
