@@ -8,20 +8,26 @@ const uploadPhotoForm = document.querySelector('.img-upload__form');
 const scaleControlValue = uploadPhotoForm.querySelector('.scale__control--value');
 const previewPhotoForm = uploadPhotoForm.querySelector('.img-upload__preview img');
 
-const onClickButtonsScale = (evt) => {
+const onClickButtonScaleBigger = () => {
   let curValue = parseInt(scaleControlValue.value, 10);
 
-  if (curValue < SCALE_PHOTO_MAX &&
-    evt.target.classList.contains('scale__control--bigger')) {
+  if (curValue < SCALE_PHOTO_MAX) {
     curValue += SCALE_PHOTO_CHANGE;
-  }
-  if (curValue > SCALE_PHOTO_MIN &&
-    evt.target.classList.contains('scale__control--smaller')) {
-    curValue -= SCALE_PHOTO_CHANGE;
+    scaleControlValue.value = `${curValue}%`;
   }
 
-  scaleControlValue.value = `${curValue}%`;
   previewPhotoForm.style.transform = `scale(${curValue * 0.01})`;
 };
 
-export { onClickButtonsScale };
+const onClickButtonScaleSmaller = () => {
+  let curValue = parseInt(scaleControlValue.value, 10);
+
+  if (curValue > SCALE_PHOTO_MIN) {
+    curValue -= SCALE_PHOTO_CHANGE;
+    scaleControlValue.value = `${curValue}%`;
+  }
+
+  previewPhotoForm.style.transform = `scale(${curValue * 0.01})`;
+};
+
+export { onClickButtonScaleBigger, onClickButtonScaleSmaller };

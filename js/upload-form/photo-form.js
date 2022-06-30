@@ -1,6 +1,6 @@
 import { isEscape } from '../functions/helpers.js';
 import { removeEventListeners } from '../functions/managers-dom.js';
-import { onClickButtonsScale } from './scale-controle.js';
+import { onClickButtonScaleBigger, onClickButtonScaleSmaller } from './scale-controle.js';
 import {
   isValidLength,
   isValidHashtagSymbols,
@@ -27,8 +27,8 @@ const buttonScalePhotoBigger = changePhotoForm.querySelector('.scale__control--b
 const buttonScalePhotoSmaller = changePhotoForm.querySelector('.scale__control--smaller');
 
 const changeScalePhotoPreview = () => {
-  buttonScalePhotoBigger.addEventListener('click', onClickButtonsScale);
-  buttonScalePhotoSmaller.addEventListener('click', onClickButtonsScale);
+  buttonScalePhotoBigger.addEventListener('click', onClickButtonScaleBigger);
+  buttonScalePhotoSmaller.addEventListener('click', onClickButtonScaleSmaller);
 };
 
 const pristine = new Pristine(uploadPhotoForm, {
@@ -62,8 +62,8 @@ function onEscCloseForm (evt) {
     evt.preventDefault();
     addChangesFormClose();
     removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
-    buttonScalePhotoBigger.removeEventListener('click', onClickButtonsScale);
-    buttonScalePhotoSmaller.removeEventListener('click', onClickButtonsScale);
+    buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
+    buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);
   }
 }
 
@@ -73,8 +73,8 @@ function onEscCloseForm (evt) {
 function onClickCloseForm () {
   addChangesFormClose();
   removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
-  buttonScalePhotoBigger.removeEventListener('click', onClickButtonsScale);
-  buttonScalePhotoSmaller.removeEventListener('click', onClickButtonsScale);
+  buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
+  buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);
 }
 
 /**
