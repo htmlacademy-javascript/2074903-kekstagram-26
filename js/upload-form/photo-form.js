@@ -1,6 +1,7 @@
 import { isEscape } from '../functions/helpers.js';
 import { removeEventListeners } from '../functions/managers-dom.js';
 import { onClickButtonScaleBigger, onClickButtonScaleSmaller } from './scale-controle.js';
+import { addOpenEffectHandler, cleanPhotoEffects } from './photo-effects.js';
 import {
   isValidLength,
   isValidHashtagSymbols,
@@ -64,6 +65,7 @@ function onEscCloseForm (evt) {
     removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
     buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
     buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);
+    cleanPhotoEffects();
   }
 }
 
@@ -75,6 +77,7 @@ function onClickCloseForm () {
   removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
   buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
   buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);
+  cleanPhotoEffects();
 }
 
 /**
@@ -93,6 +96,7 @@ const addOpenFormUploadPhotoHandler = () => {
     changePhotoForm.classList.remove('hidden');
     staticPageContent.classList.add('modal-open');
     changeScalePhotoPreview();
+    addOpenEffectHandler();
     //addedPhotoPreview.src = fieldUploadPhoto.value;
     exitForm();
   });
