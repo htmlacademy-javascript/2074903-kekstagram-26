@@ -1,4 +1,4 @@
-import { EFFECTS } from '../constants.js';
+import { effects } from '../constants.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const sliderContainer = uploadPhotoForm.querySelector('.img-upload__effect-level');
@@ -8,7 +8,7 @@ const effectsContainer = uploadPhotoForm.querySelector('.effects__list');
 const previewPhotoForm = uploadPhotoForm.querySelector('.img-upload__preview img');
 
 const addPhotoEffect = (selectedEffect) => {
-  const effect = EFFECTS[selectedEffect.value];
+  const effect = effects[selectedEffect.value];
   if (previewPhotoForm.className) {
     previewPhotoForm.classList.remove(previewPhotoForm.className);
     sliderEffects.noUiSlider.destroy();

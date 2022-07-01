@@ -10,7 +10,7 @@ const SCALE_PHOTO_MIN = 25;
 const SCALE_PHOTO_MAX = 100;
 const SCALE_PHOTO_CHANGE = 25;
 
-const FORMAT_VALUE_EFFECT = {
+const formatValueEffect = {
   to: function (value) {
     if (Number.isInteger(value)) {
       return value.toFixed(0);
@@ -22,7 +22,7 @@ const FORMAT_VALUE_EFFECT = {
   },
 };
 
-const EFFECTS = {
+const effects = {
   'chrome': {
     filter: 'grayscale',
     class: 'effects__preview--chrome',
@@ -35,7 +35,7 @@ const EFFECTS = {
       start: 1,
       step: 0.1,
       connect: 'lower',
-      format: FORMAT_VALUE_EFFECT,
+      format: formatValueEffect,
     }
   },
   'sepia': {
@@ -50,7 +50,7 @@ const EFFECTS = {
       start: 1,
       step: 0.1,
       connect: 'lower',
-      format: FORMAT_VALUE_EFFECT,
+      format: formatValueEffect,
     }
   },
   'marvin': {
@@ -65,7 +65,7 @@ const EFFECTS = {
       start: 100,
       step: 1,
       connect: 'lower',
-      format: FORMAT_VALUE_EFFECT,
+      format: formatValueEffect,
     }
   },
   'phobos': {
@@ -80,7 +80,7 @@ const EFFECTS = {
       start: 3,
       step: 0.1,
       connect: 'lower',
-      format: FORMAT_VALUE_EFFECT,
+      format: formatValueEffect,
     }
   },
   'heat': {
@@ -95,7 +95,7 @@ const EFFECTS = {
       start: 3,
       step: 0.1,
       connect: 'lower',
-      format: FORMAT_VALUE_EFFECT,
+      format: formatValueEffect,
     }
   }
 };
@@ -109,5 +109,5 @@ export {
   SCALE_PHOTO_MIN,
   SCALE_PHOTO_MAX,
   SCALE_PHOTO_CHANGE,
-  EFFECTS
+  effects
 };
