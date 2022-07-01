@@ -36,7 +36,7 @@ const EFFECTS = {
       step: 0.1,
       connect: 'lower',
       format: FORMAT_VALUE_EFFECT,
-    },
+    }
   },
   'sepia': {
     filter: 'sepia',
@@ -51,7 +51,7 @@ const EFFECTS = {
       step: 0.1,
       connect: 'lower',
       format: FORMAT_VALUE_EFFECT,
-    },
+    }
   },
   'marvin': {
     filter: 'invert',
@@ -66,7 +66,7 @@ const EFFECTS = {
       step: 1,
       connect: 'lower',
       format: FORMAT_VALUE_EFFECT,
-    },
+    }
   },
   'phobos': {
     filter: 'blur',
@@ -81,7 +81,7 @@ const EFFECTS = {
       step: 0.1,
       connect: 'lower',
       format: FORMAT_VALUE_EFFECT,
-    },
+    }
   },
   'heat': {
     filter: 'brightness',
@@ -96,7 +96,7 @@ const EFFECTS = {
       step: 0.1,
       connect: 'lower',
       format: FORMAT_VALUE_EFFECT,
-    },
+    }
   }
 };
 
