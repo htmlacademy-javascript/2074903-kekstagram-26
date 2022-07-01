@@ -1,6 +1,6 @@
 import { isEscape } from '../functions/helpers.js';
 import { removeEventListeners } from '../functions/managers-dom.js';
-import { onClickButtonScaleBigger, onClickButtonScaleSmaller } from './scale-control.js';
+import { changeScalePhotoHandler, removeScalePhotoHandler } from './scale-control.js';
 import { addOpenEffectHandler, cleanPhotoEffects } from './photo-effects.js';
 import {
   isValidLength,
@@ -19,19 +19,9 @@ const uploadPhotoForm = document.querySelector('.img-upload__form');
 const fieldUploadPhoto = uploadPhotoForm.querySelector('#upload-file');
 const changePhotoForm = uploadPhotoForm.querySelector('.img-upload__overlay');
 const staticPageContent = document.querySelector('body');
-const previewPhotoForm = uploadPhotoForm.querySelector('.img-upload__preview img');
 const buttonClose = uploadPhotoForm.querySelector('#upload-cancel');
 const hashtagFiled = changePhotoForm.querySelector('.text__hashtags');
 const commentField = changePhotoForm.querySelector('.text__description');
-
-const buttonScalePhotoBigger = changePhotoForm.querySelector('.scale__control--bigger');
-const buttonScalePhotoSmaller = changePhotoForm.querySelector('.scale__control--smaller');
-const scaleControlValue = uploadPhotoForm.querySelector('.scale__control--value');
-
-const changeScalePhotoPreview = () => {
-  buttonScalePhotoBigger.addEventListener('click', onClickButtonScaleBigger);
-  buttonScalePhotoSmaller.addEventListener('click', onClickButtonScaleSmaller);
-};
 
 const pristine = new Pristine(uploadPhotoForm, {
   classTo: 'img-upload__field-wrapper',
@@ -64,10 +54,7 @@ function onEscCloseForm (evt) {
     evt.preventDefault();
     addChangesFormClose();
     removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
-    buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
-    buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);
-    scaleControlValue.value = '100%';
-    previewPhotoForm.style.transform = 'scale(1)';
+    removeScalePhotoHandler();
     cleanPhotoEffects();
   }
 }
@@ -78,10 +65,7 @@ function onEscCloseForm (evt) {
 function onClickCloseForm () {
   addChangesFormClose();
   removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
-  buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
-  buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);
-  scaleControlValue.value = '100%';
-  previewPhotoForm.style.transform = 'scale(1)';
+  removeScalePhotoHandler();
   cleanPhotoEffects();
 }
 
@@ -100,7 +84,7 @@ const addOpenFormUploadPhotoHandler = () => {
   fieldUploadPhoto.addEventListener('change', () => {
     changePhotoForm.classList.remove('hidden');
     staticPageContent.classList.add('modal-open');
-    changeScalePhotoPreview();
+    changeScalePhotoHandler();
     addOpenEffectHandler();
     //addedPhotoPreview.src = fieldUploadPhoto.value;
     exitForm();
