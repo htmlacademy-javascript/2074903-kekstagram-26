@@ -37,9 +37,12 @@ const pristine = new Pristine(uploadPhotoForm, {
  * reset the form and pristine
  */
 const addChangesFormClose = () => {
+  removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
   changePhotoForm.classList.add('hidden');
   staticPageContent.classList.remove('modal-open');
   uploadPhotoForm.reset();
+  removeScalePhotoHandler();
+  cleanPhotoEffects();
   pristine.reset();
 };
 
@@ -53,9 +56,6 @@ function onEscCloseForm (evt) {
     document.activeElement !== commentField) {
     evt.preventDefault();
     addChangesFormClose();
-    removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
-    removeScalePhotoHandler();
-    cleanPhotoEffects();
   }
 }
 
@@ -64,15 +64,12 @@ function onEscCloseForm (evt) {
  */
 function onClickCloseForm () {
   addChangesFormClose();
-  removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
-  removeScalePhotoHandler();
-  cleanPhotoEffects();
 }
 
 /**
  * Close overlay view by several ways: push escape and click cancel button
  */
-const exitForm = () => {
+const closeForm = () => {
   document.addEventListener('keydown', onEscCloseForm);
   buttonClose.addEventListener('click', onClickCloseForm);
 };
@@ -87,7 +84,7 @@ const addOpenFormUploadPhotoHandler = () => {
     changeScalePhotoHandler();
     addOpenEffectHandler();
     //addedPhotoPreview.src = fieldUploadPhoto.value;
-    exitForm();
+    closeForm();
   });
 };
 
@@ -146,7 +143,7 @@ const validateComment = (value) => (isValidLength(value, LENGTH_COMMENT));
 const getCommentErrorMessage = (value) =>
   (isValidLength(value, LENGTH_COMMENT) ? null : 'Комментарий не может быть больше 140 символов');
 
-const addPristineValidatorsFromFields = () => {
+const addPristineValidatorsFromFields = (sendData) => {
   pristine.addValidator(
     hashtagFiled,
     validateHashtag,
@@ -161,7 +158,12 @@ const addPristineValidatorsFromFields = () => {
 
   uploadPhotoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    pristine.validate();
+    if (pristine.validate()) {
+      const formDataUploadPhoto = new FormData(evt.target);
+      sendData(addChangesFormClose, ..., formDataUploadPhoto);
+    } else {
+
+    }
   });
 };
 

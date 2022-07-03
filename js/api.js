@@ -1,9 +1,37 @@
-const getLoaderPhotos = (onSuccess) => {
+const getLoaderPhotos = (onSuccess, onError) => {
   fetch('https://26.javascript.pages.academy/kekstagram/data')
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(`${response.status} ${response.statusText}`);
+    })
     .then ((data) => {
       onSuccess(data);
+    })
+    .catch((error) => {
+      onError(error.message);
     });
 };
 
-export { getLoaderPhotos };
+const sendDataNewPhoto = (onSuccess, onError, body) => {
+  fetch(
+    'https://26.javascript.pages.academy/kekstagram',
+    {
+      method: 'POST',
+      body,
+    },
+  )
+    .then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        onError('Не удалось отправить форму. Попробуйте ещё раз');
+      }
+    })
+    .catch(() => {
+      onError('Не удалось отправить форму. Попробуйте ещё раз');
+    });
+};
+
+export { getLoaderPhotos, sendDataNewPhoto };
