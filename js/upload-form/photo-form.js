@@ -14,6 +14,7 @@ import {
   MAX_HASHTAG_LENGTH,
   MIN_HASHTAG_LENGTH
 } from '../constants.js';
+import { addSuccessMessage } from './messages-submit.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const fieldUploadPhoto = uploadPhotoForm.querySelector('#upload-file');
@@ -156,15 +157,21 @@ const addPristineValidatorsFromFields = (sendData) => {
     getCommentErrorMessage
   );
 
-  /*uploadPhotoForm.addEventListener('submit', (evt) => {
+  uploadPhotoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if (pristine.validate()) {
       const formDataUploadPhoto = new FormData(evt.target);
-      sendData(addChangesFormClose, ..., formDataUploadPhoto);
+      sendData(
+        () => {
+          addChangesFormClose();
+          addSuccessMessage()
+        },
+        ..., formDataUploadPhoto
+      );
     } else {
 
     }
-  });*/
+  });
 };
 
 export { addOpenFormUploadPhotoHandler, addPristineValidatorsFromFields };

@@ -23,4 +23,4 @@ const addPreviews = (photoElements) => {
   photosContainer.append(photosContainerFragment);
 };
 
-export { addPreviews, photosContainer };
+export { addPreviews };
