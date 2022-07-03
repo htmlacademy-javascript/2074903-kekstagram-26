@@ -13,7 +13,7 @@ const addPreviews = (photoElements) => {
 
   photoElements.forEach(({id, url, likes, comments}) => {
     const photoElement = randomPhotoTemplate.cloneNode(true);
-    photoElement.dataset.index = id - 1;
+    photoElement.dataset.index = id;
     photoElement.querySelector('.picture__img').src = url;
     photoElement.querySelector('.picture__likes').textContent = likes;
     photoElement.querySelector('.picture__comments').textContent = comments.length;
