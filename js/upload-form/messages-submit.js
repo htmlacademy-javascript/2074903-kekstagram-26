@@ -10,56 +10,61 @@ const errorMessageTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
 
-const closeSubmitMessage = (message, button) => {
+const closeSubmitMessage = (message, button, form) => {
+  if (message.classList.contains('error')) {
+    form.classList.remove('hidden');
+  }
   message.remove();
-  button.removeEventListener('click', onClickButtonSubmitMessage(message, button));
-  document.removeEventListener('click', onClickDocumentSubmitMessage(message, button));
-  document.removeEventListener('keydown', onEscSubmitMessage(message, button));
+  button.removeEventListener('click', onClickButtonSubmitMessage(message, button, form));
+  document.removeEventListener('click', onClickDocumentSubmitMessage(message, button, form));
+  document.removeEventListener('keydown', onEscSubmitMessage(message, button, form));
+  console.log('я выполнился');
 };
 
-function onClickButtonSubmitMessage (message, button) {
+function onClickButtonSubmitMessage (message, button, form) {
   return () => {
-    closeSubmitMessage(message, button);
+    closeSubmitMessage(message, button, form);
   };
 }
 
-function onClickDocumentSubmitMessage (message, button) {
+function onClickDocumentSubmitMessage (message, button, form) {
   return (evt) => {
-    if (evt.target !== message) {
-      closeSubmitMessage(message, button);
+    if (evt.target.matches('.success') || evt.target.matches('.error')) {
+      closeSubmitMessage(message, button, form);
     }
   };
 }
 
-function onEscSubmitMessage (message, button) {
+function onEscSubmitMessage (message, button, form) {
   return (evt) => {
-    if (isEscape(evt)) {
+    if (isEscape(evt) && form.classList.contains('hidden')) {
+      console.log(form.classList.contains('hidden'));
       evt.preventDefault();
-      closeSubmitMessage(message, button);
+      closeSubmitMessage(message, button, form);
     }
   };
 }
 
-const addSuccessMessage = () => {
+const addSuccessMessage = (form) => {
   const successMessage = successMessageTemplate.cloneNode(true);
   const successButton = successMessage.querySelector('.success__button');
 
   bodyPage.append(successMessage);
 
-  successButton.addEventListener('click', onClickButtonSubmitMessage(successMessage, successButton));
-  document.addEventListener('click', onClickDocumentSubmitMessage(successMessage, successButton));
-  document.addEventListener('keydown', onEscSubmitMessage(successMessage, successButton));
+  successButton.addEventListener('click', onClickButtonSubmitMessage(successMessage, successButton, form));
+  document.addEventListener('click', onClickDocumentSubmitMessage(successMessage, successButton, form));
+  document.addEventListener('keydown', onEscSubmitMessage(successMessage, successButton, form));
 };
 
-const addErrorMessage = () => {
+const addErrorMessage = (form) => {
   const errorMessage = errorMessageTemplate.cloneNode(true);
   const errorButton = errorMessage.querySelector('.error__button');
-
+  form.classList.add('hidden');
   bodyPage.append(errorMessage);
 
-  errorButton.addEventListener('click', onClickButtonSubmitMessage(errorMessage, errorButton));
-  document.addEventListener('click', onClickDocumentSubmitMessage(errorMessage, errorButton));
-  document.addEventListener('keydown', onEscSubmitMessage(errorMessage, errorButton));
+  errorButton.addEventListener('click', onClickButtonSubmitMessage(errorMessage, errorButton, form));
+  document.addEventListener('click', onClickDocumentSubmitMessage(errorMessage, errorButton, form));
+  document.addEventListener('keydown', onEscSubmitMessage(errorMessage, errorButton, form));
 };
 
 export { addSuccessMessage, addErrorMessage };

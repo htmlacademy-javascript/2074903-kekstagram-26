@@ -132,7 +132,7 @@ const addOpenEffectHandler = () => {
 
 const cleanPhotoEffects = () => {
   if (previewPhotoForm.className) {
-    previewPhotoForm.classList.remove();
+    previewPhotoForm.classList.remove(previewPhotoForm.className);
     sliderEffects.noUiSlider.destroy();
     previewPhotoForm.style.removeProperty('filter');
   }

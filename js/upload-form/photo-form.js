@@ -41,9 +41,9 @@ const addChangesFormClose = () => {
   removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
   changePhotoForm.classList.add('hidden');
   staticPageContent.classList.remove('modal-open');
-  uploadPhotoForm.reset();
   removeScalePhotoHandler();
   cleanPhotoEffects();
+  uploadPhotoForm.reset();
   pristine.reset();
 };
 
@@ -54,9 +54,11 @@ const addChangesFormClose = () => {
 function onEscCloseForm (evt) {
   if (isEscape(evt) &&
     document.activeElement !== hashtagFiled &&
-    document.activeElement !== commentField) {
+    document.activeElement !== commentField &&
+    !changePhotoForm.classList.contains('hidden')) {
     evt.preventDefault();
     addChangesFormClose();
+    console.log('и я тоже');
   }
 }
 
@@ -104,6 +106,7 @@ const validateHashtag = (value) => {
   validHashtags.push(isValidUniqueHashtags(hashtags));
   validHashtags.push(isValidLength(hashtags, COUNT_HASHTAGS));
   return !validHashtags.includes(false);
+
 };
 
 /**
@@ -164,9 +167,11 @@ const addPristineValidatorsFromFields = (sendData) => {
       sendData(
         () => {
           addChangesFormClose();
-          addSuccessMessage();
+          addSuccessMessage(changePhotoForm);
         },
-        addErrorMessage,
+        () => {
+          addErrorMessage(changePhotoForm);
+        },
         formDataUploadPhoto
       );
     }
