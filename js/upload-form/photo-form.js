@@ -156,7 +156,7 @@ const addPristineValidatorsFromFields = (sendData) => {
     getCommentErrorMessage
   );
 
-  uploadPhotoForm.addEventListener('submit', (evt) => {
+  /*uploadPhotoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if (pristine.validate()) {
       const formDataUploadPhoto = new FormData(evt.target);
@@ -164,7 +164,7 @@ const addPristineValidatorsFromFields = (sendData) => {
     } else {
 
     }
-  });
+  });*/
 };
 
 export { addOpenFormUploadPhotoHandler, addPristineValidatorsFromFields };
