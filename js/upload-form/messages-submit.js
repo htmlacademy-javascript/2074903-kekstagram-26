@@ -6,32 +6,36 @@ const successMessageTemplate = document.querySelector('#success')
   .content
   .querySelector('.success');
 
-const closeSuccessMessage = (message, button) => {
+const errorMessageTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+
+const closeSubmitMessage = (message, button) => {
   message.remove();
-  button.removeEventListener('click', onClickButtonSuccessMessage(message, button));
-  document.removeEventListener('click', onClickDocumentSuccessMessage(message, button));
-  document.removeEventListener('keydown', onEscSuccessMessage(message, button));
+  button.removeEventListener('click', onClickButtonSubmitMessage(message, button));
+  document.removeEventListener('click', onClickDocumentSubmitMessage(message, button));
+  document.removeEventListener('keydown', onEscSubmitMessage(message, button));
 };
 
-function onClickButtonSuccessMessage (message, button) {
+function onClickButtonSubmitMessage (message, button) {
   return () => {
-    closeSuccessMessage(message, button);
+    closeSubmitMessage(message, button);
   };
 }
 
-function onClickDocumentSuccessMessage (message, button) {
+function onClickDocumentSubmitMessage (message, button) {
   return (evt) => {
     if (evt.target !== message) {
-      closeSuccessMessage(message, button);
+      closeSubmitMessage(message, button);
     }
   };
 }
 
-function onEscSuccessMessage (message, button) {
+function onEscSubmitMessage (message, button) {
   return (evt) => {
     if (isEscape(evt)) {
       evt.preventDefault();
-      closeSuccessMessage(message, button);
+      closeSubmitMessage(message, button);
     }
   };
 }
@@ -42,9 +46,20 @@ const addSuccessMessage = () => {
 
   bodyPage.append(successMessage);
 
-  successButton.addEventListener('click', onClickButtonSuccessMessage(successMessage, successButton));
-  document.addEventListener('click', onClickDocumentSuccessMessage(successMessage, successButton));
-  document.addEventListener('keydown', onEscSuccessMessage(successMessage, successButton));
+  successButton.addEventListener('click', onClickButtonSubmitMessage(successMessage, successButton));
+  document.addEventListener('click', onClickDocumentSubmitMessage(successMessage, successButton));
+  document.addEventListener('keydown', onEscSubmitMessage(successMessage, successButton));
 };
 
-export { addSuccessMessage };
+const addErrorMessage = () => {
+  const errorMessage = errorMessageTemplate.cloneNode(true);
+  const errorButton = errorMessage.querySelector('.error__button');
+
+  bodyPage.append(errorMessage);
+
+  errorButton.addEventListener('click', onClickButtonSubmitMessage(errorMessage, errorButton));
+  document.addEventListener('click', onClickDocumentSubmitMessage(errorMessage, errorButton));
+  document.addEventListener('keydown', onEscSubmitMessage(errorMessage, errorButton));
+};
+
+export { addSuccessMessage, addErrorMessage };

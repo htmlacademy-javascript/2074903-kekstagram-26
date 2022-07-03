@@ -14,7 +14,7 @@ import {
   MAX_HASHTAG_LENGTH,
   MIN_HASHTAG_LENGTH
 } from '../constants.js';
-import { addSuccessMessage } from './messages-submit.js';
+import { addErrorMessage, addSuccessMessage } from './messages-submit.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const fieldUploadPhoto = uploadPhotoForm.querySelector('#upload-file');
@@ -164,12 +164,11 @@ const addPristineValidatorsFromFields = (sendData) => {
       sendData(
         () => {
           addChangesFormClose();
-          addSuccessMessage()
+          addSuccessMessage();
         },
-        ..., formDataUploadPhoto
+        addErrorMessage,
+        formDataUploadPhoto
       );
-    } else {
-
     }
   });
 };
