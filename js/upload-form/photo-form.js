@@ -101,6 +101,7 @@ const regexCheckHashtag = /^#[A-Za-zА-Яа-яЁё0-9]{1,100}$/;
 const validateHashtag = (value) => {
   const hashtags = value.split(' ');
   const validHashtags = [];
+  if (!value) {return !validHashtags.includes(true);}
   validHashtags.push(isValidHashtagSymbols(hashtags, regexCheckHashtag));
   validHashtags.push(isValidHashtagLength(hashtags, MAX_HASHTAG_LENGTH, MIN_HASHTAG_LENGTH));
   validHashtags.push(isValidUniqueHashtags(hashtags));
@@ -157,7 +158,7 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-const addPristineValidatorsFromFields = (sendData) => {
+const sendValidatedPhotoForm = (sendData) => {
   pristine.addValidator(
     hashtagFiled,
     validateHashtag,
@@ -191,4 +192,4 @@ const addPristineValidatorsFromFields = (sendData) => {
   });
 };
 
-export { addOpenFormUploadPhotoHandler, addPristineValidatorsFromFields };
+export { addOpenFormUploadPhotoHandler, sendValidatedPhotoForm };
