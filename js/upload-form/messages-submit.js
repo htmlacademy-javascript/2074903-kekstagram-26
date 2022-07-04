@@ -1,6 +1,7 @@
 import { isEscape } from '../functions/helpers.js';
 
 const bodyPage = document.querySelector('body');
+const changePhotoForm = bodyPage.querySelector('.img-upload__overlay');
 
 const successMessageTemplate = document.querySelector('#success')
   .content
@@ -10,61 +11,75 @@ const errorMessageTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
 
-const closeSubmitMessage = (message, button, form) => {
-  if (message.classList.contains('error')) {
-    form.classList.remove('hidden');
-  }
-  message.remove();
-  button.removeEventListener('click', onClickButtonSubmitMessage(message, button, form));
-  document.removeEventListener('click', onClickDocumentSubmitMessage(message, button, form));
-  document.removeEventListener('keydown', onEscSubmitMessage(message, button, form));
-  console.log('я выполнился');
-};
-
-function onClickButtonSubmitMessage (message, button, form) {
-  return () => {
-    closeSubmitMessage(message, button, form);
-  };
-}
-
-function onClickDocumentSubmitMessage (message, button, form) {
-  return (evt) => {
-    if (evt.target.matches('.success') || evt.target.matches('.error')) {
-      closeSubmitMessage(message, button, form);
-    }
-  };
-}
-
-function onEscSubmitMessage (message, button, form) {
-  return (evt) => {
-    if (isEscape(evt) && form.classList.contains('hidden')) {
-      console.log(form.classList.contains('hidden'));
-      evt.preventDefault();
-      closeSubmitMessage(message, button, form);
-    }
-  };
-}
-
-const addSuccessMessage = (form) => {
+const addSuccessMessage = () => {
   const successMessage = successMessageTemplate.cloneNode(true);
   const successButton = successMessage.querySelector('.success__button');
 
   bodyPage.append(successMessage);
 
-  successButton.addEventListener('click', onClickButtonSubmitMessage(successMessage, successButton, form));
-  document.addEventListener('click', onClickDocumentSubmitMessage(successMessage, successButton, form));
-  document.addEventListener('keydown', onEscSubmitMessage(successMessage, successButton, form));
+  const closeSuccessMessage = () => {
+    successMessage.remove();
+    successButton.removeEventListener('click', onClickSuccessButton);
+    document.removeEventListener('click', onClickOutSuccessMessage);
+    document.removeEventListener('keydown', onEscCloseSuccessMessage);
+  };
+
+  function onClickSuccessButton () {
+    closeSuccessMessage();
+  }
+
+  function onClickOutSuccessMessage (evt) {
+    if (evt.target.matches('.success')) {
+      closeSuccessMessage();
+    }
+  }
+
+  function onEscCloseSuccessMessage (evt) {
+    if (isEscape(evt) && changePhotoForm.classList.contains('hidden')) {
+      evt.preventDefault();
+      closeSuccessMessage();
+    }
+  }
+
+  successButton.addEventListener('click', onClickSuccessButton);
+  document.addEventListener('click', onClickOutSuccessMessage);
+  document.addEventListener('keydown', onEscCloseSuccessMessage);
 };
 
-const addErrorMessage = (form) => {
+const addErrorMessage = () => {
   const errorMessage = errorMessageTemplate.cloneNode(true);
   const errorButton = errorMessage.querySelector('.error__button');
-  form.classList.add('hidden');
+  changePhotoForm.classList.add('hidden');
   bodyPage.append(errorMessage);
 
-  errorButton.addEventListener('click', onClickButtonSubmitMessage(errorMessage, errorButton, form));
-  document.addEventListener('click', onClickDocumentSubmitMessage(errorMessage, errorButton, form));
-  document.addEventListener('keydown', onEscSubmitMessage(errorMessage, errorButton, form));
+  const closeErrorMessage = () => {
+    changePhotoForm.classList.remove('hidden');
+    errorMessage.remove();
+    errorButton.removeEventListener('click', onClickErrorButton);
+    document.removeEventListener('click', onClickOutErrorMessage);
+    document.removeEventListener('keydown', onEscCloseErrorMessage);
+  };
+
+  function onClickErrorButton () {
+    closeErrorMessage();
+  }
+
+  function onClickOutErrorMessage (evt) {
+    if (evt.target.matches('.error')) {
+      closeErrorMessage();
+    }
+  }
+
+  function onEscCloseErrorMessage (evt) {
+    if (isEscape(evt) && changePhotoForm.classList.contains('hidden')) {
+      evt.preventDefault();
+      closeErrorMessage();
+    }
+  }
+
+  errorButton.addEventListener('click', onClickErrorButton);
+  document.addEventListener('click', onClickOutErrorMessage);
+  document.addEventListener('keydown', onEscCloseErrorMessage);
 };
 
 export { addSuccessMessage, addErrorMessage };

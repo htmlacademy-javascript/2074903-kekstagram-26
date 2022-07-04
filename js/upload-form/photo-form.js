@@ -23,6 +23,7 @@ const staticPageContent = document.querySelector('body');
 const buttonClose = uploadPhotoForm.querySelector('#upload-cancel');
 const hashtagFiled = changePhotoForm.querySelector('.text__hashtags');
 const commentField = changePhotoForm.querySelector('.text__description');
+const submitButton = changePhotoForm.querySelector('.img-upload__submit');
 
 const pristine = new Pristine(uploadPhotoForm, {
   classTo: 'img-upload__field-wrapper',
@@ -58,7 +59,6 @@ function onEscCloseForm (evt) {
     !changePhotoForm.classList.contains('hidden')) {
     evt.preventDefault();
     addChangesFormClose();
-    console.log('и я тоже');
   }
 }
 
@@ -147,6 +147,16 @@ const validateComment = (value) => (isValidLength(value, LENGTH_COMMENT));
 const getCommentErrorMessage = (value) =>
   (isValidLength(value, LENGTH_COMMENT) ? null : 'Комментарий не может быть больше 140 символов');
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Сохраняю...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
 const addPristineValidatorsFromFields = (sendData) => {
   pristine.addValidator(
     hashtagFiled,
@@ -163,14 +173,17 @@ const addPristineValidatorsFromFields = (sendData) => {
   uploadPhotoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if (pristine.validate()) {
+      blockSubmitButton();
       const formDataUploadPhoto = new FormData(evt.target);
       sendData(
         () => {
           addChangesFormClose();
-          addSuccessMessage(changePhotoForm);
+          addSuccessMessage();
+          unblockSubmitButton();
         },
         () => {
-          addErrorMessage(changePhotoForm);
+          addErrorMessage();
+          unblockSubmitButton();
         },
         formDataUploadPhoto
       );

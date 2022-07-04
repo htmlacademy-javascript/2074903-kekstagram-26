@@ -16,7 +16,7 @@ const getLoaderPhotos = (onSuccess, onError) => {
 
 const sendDataNewPhoto = (onSuccess, onError, body) => {
   fetch(
-    'https://26.javascript.pages.academ/kekstagram',
+    'https://26.javascript.pages.academy/kekstagram',
     {
       method: 'POST',
       body,
