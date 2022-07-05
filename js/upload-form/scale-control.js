@@ -1,7 +1,9 @@
 import {
   SCALE_PHOTO_MIN,
   SCALE_PHOTO_MAX,
-  SCALE_PHOTO_CHANGE
+  SCALE_PHOTO_CHANGE,
+  START_VALUE_SCALE,
+  COEFFICIENT_STYLE_TRANSFORM_SCALE
 } from '../constants.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
@@ -18,7 +20,7 @@ const onClickButtonScaleBigger = () => {
     scaleControlValue.value = `${curValue}%`;
   }
 
-  previewPhotoForm.style.transform = `scale(${curValue * 0.01})`;
+  previewPhotoForm.style.transform = `scale(${curValue * COEFFICIENT_STYLE_TRANSFORM_SCALE})`;
 };
 
 const onClickButtonScaleSmaller = () => {
@@ -40,7 +42,7 @@ const changeScalePhotoHandler = () => {
 const removeScalePhotoHandler = () => {
   buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
   buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);
-  scaleControlValue.value = '100%';
+  scaleControlValue.value = START_VALUE_SCALE;
   previewPhotoForm.style.transform = 'scale(1)';
 };
 
