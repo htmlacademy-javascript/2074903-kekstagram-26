@@ -12,6 +12,10 @@ const previewPhotoForm = uploadPhotoForm.querySelector('.img-upload__preview img
 const buttonScalePhotoBigger = uploadPhotoForm.querySelector('.scale__control--bigger');
 const buttonScalePhotoSmaller = uploadPhotoForm.querySelector('.scale__control--smaller');
 
+/**
+ * The function of the event handler to enlarge the photo
+ * when the bigger button is clicked
+ */
 const onClickButtonScaleBigger = () => {
   let curValue = parseInt(scaleControlValue.value, 10);
 
@@ -23,6 +27,10 @@ const onClickButtonScaleBigger = () => {
   previewPhotoForm.style.transform = `scale(${curValue * COEFFICIENT_STYLE_TRANSFORM_SCALE})`;
 };
 
+/**
+ * The function of the event handler to reduce the photo
+ * when the smaller button is clicked
+ */
 const onClickButtonScaleSmaller = () => {
   let curValue = parseInt(scaleControlValue.value, 10);
 
@@ -34,11 +42,17 @@ const onClickButtonScaleSmaller = () => {
   previewPhotoForm.style.transform = `scale(${curValue * COEFFICIENT_STYLE_TRANSFORM_SCALE})`;
 };
 
+/**
+ * The function starts the work of the hadler to change photo scale
+ */
 const changeScalePhotoHandler = () => {
   buttonScalePhotoBigger.addEventListener('click', onClickButtonScaleBigger);
   buttonScalePhotoSmaller.addEventListener('click', onClickButtonScaleSmaller);
 };
 
+/**
+ * The function finishes the work of the handler to change photo scale
+ */
 const removeScalePhotoHandler = () => {
   buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
   buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);

@@ -67,6 +67,10 @@ const exitFullMode = () => {
   buttonClose.addEventListener('click', onClickCloseOverlay);
 };
 
+/**
+ * Counts every opening 'page' of comment
+ * @returns {int} new number for next 'page' of comments
+ */
 const givePageNumber = () => {
   let page = 0;
   const getNextPage = () => (page++);
@@ -97,6 +101,10 @@ const fillFullPhoto = (dataPhoto) => {
 
   const addNewPage = givePageNumber();
 
+  /**
+   * The function of the event handler for adding a new set comments
+   * when user clicks button to load else
+   */
   const onClickAddNewComments = () => {
     buttonLoaderComments.classList.remove('hidden');
     const curPage = addNewPage();

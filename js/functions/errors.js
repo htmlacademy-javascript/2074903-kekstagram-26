@@ -1,5 +1,9 @@
 import { ALERT_SHOW_TIME } from '../constants.js';
 
+/**
+ * Shows the announcement of connect server error when user try to see the main content
+ * @param {string} message the message of error
+ */
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
