@@ -1,6 +1,6 @@
 import { isEscape } from '../functions/helpers.js';
 import { removeEventListeners } from '../functions/managers-dom.js';
-import { onClickButtonScaleBigger, onClickButtonScaleSmaller } from './scale-controle.js';
+import { changeScalePhotoHandler, removeScalePhotoHandler } from './scale-control.js';
 import { addOpenEffectHandler, cleanPhotoEffects } from './photo-effects.js';
 import {
   isValidLength,
@@ -14,23 +14,16 @@ import {
   MAX_HASHTAG_LENGTH,
   MIN_HASHTAG_LENGTH
 } from '../constants.js';
+import { addErrorMessage, addSuccessMessage } from './messages-submit.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const fieldUploadPhoto = uploadPhotoForm.querySelector('#upload-file');
 const changePhotoForm = uploadPhotoForm.querySelector('.img-upload__overlay');
 const staticPageContent = document.querySelector('body');
-//const addedPhotoPreview = changePhotoForm.querySelector('.img-upload__preview');
 const buttonClose = uploadPhotoForm.querySelector('#upload-cancel');
 const hashtagFiled = changePhotoForm.querySelector('.text__hashtags');
 const commentField = changePhotoForm.querySelector('.text__description');
-
-const buttonScalePhotoBigger = changePhotoForm.querySelector('.scale__control--bigger');
-const buttonScalePhotoSmaller = changePhotoForm.querySelector('.scale__control--smaller');
-
-const changeScalePhotoPreview = () => {
-  buttonScalePhotoBigger.addEventListener('click', onClickButtonScaleBigger);
-  buttonScalePhotoSmaller.addEventListener('click', onClickButtonScaleSmaller);
-};
+const submitButton = changePhotoForm.querySelector('.img-upload__submit');
 
 const pristine = new Pristine(uploadPhotoForm, {
   classTo: 'img-upload__field-wrapper',
@@ -46,8 +39,11 @@ const pristine = new Pristine(uploadPhotoForm, {
  * reset the form and pristine
  */
 const addChangesFormClose = () => {
+  removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
   changePhotoForm.classList.add('hidden');
   staticPageContent.classList.remove('modal-open');
+  removeScalePhotoHandler();
+  cleanPhotoEffects();
   uploadPhotoForm.reset();
   pristine.reset();
 };
@@ -59,13 +55,10 @@ const addChangesFormClose = () => {
 function onEscCloseForm (evt) {
   if (isEscape(evt) &&
     document.activeElement !== hashtagFiled &&
-    document.activeElement !== commentField) {
+    document.activeElement !== commentField &&
+    !changePhotoForm.classList.contains('hidden')) {
     evt.preventDefault();
     addChangesFormClose();
-    removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
-    buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
-    buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);
-    cleanPhotoEffects();
   }
 }
 
@@ -74,16 +67,12 @@ function onEscCloseForm (evt) {
  */
 function onClickCloseForm () {
   addChangesFormClose();
-  removeEventListeners(buttonClose, onEscCloseForm, onClickCloseForm);
-  buttonScalePhotoBigger.removeEventListener('click', onClickButtonScaleBigger);
-  buttonScalePhotoSmaller.removeEventListener('click', onClickButtonScaleSmaller);
-  cleanPhotoEffects();
 }
 
 /**
  * Close overlay view by several ways: push escape and click cancel button
  */
-const exitForm = () => {
+const closeForm = () => {
   document.addEventListener('keydown', onEscCloseForm);
   buttonClose.addEventListener('click', onClickCloseForm);
 };
@@ -95,10 +84,10 @@ const addOpenFormUploadPhotoHandler = () => {
   fieldUploadPhoto.addEventListener('change', () => {
     changePhotoForm.classList.remove('hidden');
     staticPageContent.classList.add('modal-open');
-    changeScalePhotoPreview();
+    changeScalePhotoHandler();
     addOpenEffectHandler();
     //addedPhotoPreview.src = fieldUploadPhoto.value;
-    exitForm();
+    closeForm();
   });
 };
 
@@ -112,11 +101,13 @@ const regexCheckHashtag = /^#[A-Za-zА-Яа-яЁё0-9]{1,100}$/;
 const validateHashtag = (value) => {
   const hashtags = value.split(' ');
   const validHashtags = [];
+  if (!value) {return !validHashtags.includes(true);}
   validHashtags.push(isValidHashtagSymbols(hashtags, regexCheckHashtag));
   validHashtags.push(isValidHashtagLength(hashtags, MAX_HASHTAG_LENGTH, MIN_HASHTAG_LENGTH));
   validHashtags.push(isValidUniqueHashtags(hashtags));
   validHashtags.push(isValidLength(hashtags, COUNT_HASHTAGS));
   return !validHashtags.includes(false);
+
 };
 
 /**
@@ -157,7 +148,17 @@ const validateComment = (value) => (isValidLength(value, LENGTH_COMMENT));
 const getCommentErrorMessage = (value) =>
   (isValidLength(value, LENGTH_COMMENT) ? null : 'Комментарий не может быть больше 140 символов');
 
-const addPristineValidatorsFromFields = () => {
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Сохраняю...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const sendValidatedPhotoForm = (sendData) => {
   pristine.addValidator(
     hashtagFiled,
     validateHashtag,
@@ -172,8 +173,23 @@ const addPristineValidatorsFromFields = () => {
 
   uploadPhotoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    pristine.validate();
+    if (pristine.validate()) {
+      blockSubmitButton();
+      const formDataUploadPhoto = new FormData(evt.target);
+      sendData(
+        () => {
+          addChangesFormClose();
+          addSuccessMessage();
+          unblockSubmitButton();
+        },
+        () => {
+          addErrorMessage();
+          unblockSubmitButton();
+        },
+        formDataUploadPhoto
+      );
+    }
   });
 };
 
-export { addOpenFormUploadPhotoHandler, addPristineValidatorsFromFields };
+export { addOpenFormUploadPhotoHandler, sendValidatedPhotoForm };
