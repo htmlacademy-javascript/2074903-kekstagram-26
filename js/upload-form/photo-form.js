@@ -15,6 +15,7 @@ import {
   MIN_HASHTAG_LENGTH
 } from '../constants.js';
 import { addErrorMessage, addSuccessMessage } from './messages-submit.js';
+import { addUploadPhotoPreviewHandler } from './show-upload-photo.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const fieldUploadPhoto = uploadPhotoForm.querySelector('#upload-file');
@@ -86,9 +87,9 @@ const addOpenFormUploadPhotoHandler = () => {
     staticPageContent.classList.add('modal-open');
     changeScalePhotoHandler();
     addOpenEffectHandler();
-    //addedPhotoPreview.src = fieldUploadPhoto.value;
     closeForm();
   });
+  addUploadPhotoPreviewHandler();
 };
 
 const regexCheckHashtag = /^#[A-Za-zА-Яа-яЁё0-9]{1,100}$/;

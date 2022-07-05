@@ -31,7 +31,7 @@ const onClickButtonScaleSmaller = () => {
     scaleControlValue.value = `${curValue}%`;
   }
 
-  previewPhotoForm.style.transform = `scale(${curValue * 0.01})`;
+  previewPhotoForm.style.transform = `scale(${curValue * COEFFICIENT_STYLE_TRANSFORM_SCALE})`;
 };
 
 const changeScalePhotoHandler = () => {
