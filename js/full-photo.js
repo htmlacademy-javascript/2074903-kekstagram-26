@@ -84,7 +84,6 @@ const fillFullPhoto = (dataPhoto) => {
   fullPhoto.querySelector('.big-picture__img img').alt = 'Авторская фотография';
   fullPhoto.querySelector('.social__caption').textContent = dataPhoto.description;
   fullPhoto.querySelector('.likes-count').textContent = dataPhoto.likes;
-  //fullPhoto.querySelector('.comments-count').textContent = dataPhoto.comments.length;
 
   dataPhoto.comments.forEach(({avatar, nameUser, message}) => {
     const commentElement = defaultComments[0].cloneNode(true);
@@ -133,12 +132,13 @@ const fillFullPhoto = (dataPhoto) => {
  * @param {array} photoElements information of all photos which we can open
  */
 const addOpenFullPhotoHandler = (photoElements) => {
-  photosContainer.addEventListener('click', (evt) => {
+  function onClickOpenFullPhoto(evt) {
     const previewPhoto = evt.target.closest('.picture');
     if (!previewPhoto) {return;}
     if (!photosContainer.contains(previewPhoto)) {return;}
     fillFullPhoto(photoElements[previewPhoto.dataset.index]);
-  });
+  }
+  photosContainer.addEventListener('click', onClickOpenFullPhoto);
 };
 
-export { addOpenFullPhotoHandler};
+export { addOpenFullPhotoHandler };
