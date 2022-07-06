@@ -32,4 +32,17 @@ const shuffle = (items) => {
  */
 const isEscape = (evt) => (evt.key === 'Escape');
 
-export { getRndInteger, shuffle, isEscape };
+/**
+ * This function is offered by HTMLAcademy with use this source
+ * https://www.freecodecamp.org/news/javascript-debounce-example
+ */
+function debounce (callback, timeoutDelay) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+export { getRndInteger, shuffle, isEscape, debounce };

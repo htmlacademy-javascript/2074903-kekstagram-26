@@ -9,6 +9,10 @@ const randomPhotoTemplate = document.querySelector('#picture')
  * @param {array} photoElements array with photos which need to be added
  */
 const addPreviews = (photoElements) => {
+  const childrenPhotosContainer = photosContainer.children;
+  while (childrenPhotosContainer[childrenPhotosContainer.length - 1].matches('.picture')) {
+    photosContainer.lastChild.remove();
+  }
   const photosContainerFragment = document.createDocumentFragment();
 
   photoElements.forEach(({id, url, likes, comments}) => {
