@@ -15,12 +15,15 @@ import {
   MIN_HASHTAG_LENGTH
 } from '../constants.js';
 import { addErrorMessage, addSuccessMessage } from './messages-submit.js';
+import { addUploadPhotoPreviewHandler } from './show-upload-photo.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
+const staticPageContent = document.querySelector('body');
+
 const fieldUploadPhoto = uploadPhotoForm.querySelector('#upload-file');
 const changePhotoForm = uploadPhotoForm.querySelector('.img-upload__overlay');
-const staticPageContent = document.querySelector('body');
 const buttonClose = uploadPhotoForm.querySelector('#upload-cancel');
+
 const hashtagFiled = changePhotoForm.querySelector('.text__hashtags');
 const commentField = changePhotoForm.querySelector('.text__description');
 const submitButton = changePhotoForm.querySelector('.img-upload__submit');
@@ -86,9 +89,9 @@ const addOpenFormUploadPhotoHandler = () => {
     staticPageContent.classList.add('modal-open');
     changeScalePhotoHandler();
     addOpenEffectHandler();
-    //addedPhotoPreview.src = fieldUploadPhoto.value;
     closeForm();
   });
+  addUploadPhotoPreviewHandler();
 };
 
 const regexCheckHashtag = /^#[A-Za-zА-Яа-яЁё0-9]{1,100}$/;
@@ -148,16 +151,26 @@ const validateComment = (value) => (isValidLength(value, LENGTH_COMMENT));
 const getCommentErrorMessage = (value) =>
   (isValidLength(value, LENGTH_COMMENT) ? null : 'Комментарий не может быть больше 140 символов');
 
+/**
+ * Blocks the submit button of upload new photo form
+ */
 const blockSubmitButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = 'Сохраняю...';
 };
 
+/**
+ * Unblocks the submit button of upload new photo form
+ */
 const unblockSubmitButton = () => {
   submitButton.disabled = false;
   submitButton.textContent = 'Опубликовать';
 };
 
+/**
+ * Sends data from upload new photo form to the server
+ * @param {cb} sendData the function of connect to the server
+ */
 const sendValidatedPhotoForm = (sendData) => {
   pristine.addValidator(
     hashtagFiled,

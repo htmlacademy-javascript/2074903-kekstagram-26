@@ -5,8 +5,20 @@ const filterContainer = document.querySelector('.img-filters');
 const filterForm = filterContainer.querySelector('.img-filters__form');
 const buttonsFilter = filterContainer.querySelectorAll('.img-filters__button');
 
+/**
+ * Compare every elements of array to sort it with condition of comment length
+ * @param {object} photoA the first element
+ * @param {object} photoB the secind element
+ * @returns {int} about equlity of these elements or what of them is bigger
+ */
 const compareCountComments = (photoA, photoB) => photoB.comments.length - photoA.comments.length;
 
+/**
+ * Sorts existing photos from server with chose filter by user
+ * @param {object} filter the filter which was chose by user
+ * @param {array} photoElements the full array of all existing photos on the server
+ * @returns {array} new array to show user with his/her filter
+ */
 const changePhotosFilter = (filter, photoElements) => {
   if (filter.id === 'filter-default') {
     return photoElements;
@@ -19,6 +31,11 @@ const changePhotosFilter = (filter, photoElements) => {
   }
 };
 
+/**
+ * Updates photos for user after his/her choosing any filter
+ * @param {array} photoElements the full array of all existing photos on the server
+ * @param {cb} createNewPreviews the function which fills window new sort array for user
+ */
 const addUpdatePreviewsFilterHandler = (photoElements, createNewPreviews) => {
   filterContainer.classList.remove('img-filters--inactive');
 
