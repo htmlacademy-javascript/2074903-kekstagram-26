@@ -19,6 +19,11 @@ const NUMBER_RANDOM_PHOTOS = 10;
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
+const Url = {
+  GET: 'https://26.javascript.pages.academy/kekstagram/data',
+  SAVE: 'https://26.javascript.pages.academy/kekstagram'
+};
+
 export {
   LENGTH_COMMENT,
   COUNT_HASHTAGS,
@@ -33,5 +38,6 @@ export {
   ALERT_SHOW_TIME,
   RERENDER_DELAY_FILTERS,
   NUMBER_RANDOM_PHOTOS,
-  FILE_TYPES
+  FILE_TYPES,
+  Url
 };
