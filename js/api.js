@@ -1,3 +1,5 @@
+import { Url } from './constants.js';
+
 /**
  * Establishes a connection with the server to get existing photos to show to the user
  * @param {cb} onSuccess The function which will be executed with server data
@@ -6,7 +8,7 @@
  * if the connection will be unsuccessful
  */
 const getLoaderPhotos = (onSuccess, onError) => {
-  fetch('https://26.javascript.pages.academy/kekstagram/data')
+  fetch(Url.GET)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -31,7 +33,7 @@ const getLoaderPhotos = (onSuccess, onError) => {
  */
 const sendDataNewPhoto = (onSuccess, onError, body) => {
   fetch(
-    'https://26.javascript.pages.academy/kekstagram',
+    Url.SAVE,
     {
       method: 'POST',
       body,

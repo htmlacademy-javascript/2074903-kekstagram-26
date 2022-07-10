@@ -20,15 +20,13 @@ const compareCountComments = (photoA, photoB) => photoB.comments.length - photoA
  * @returns {array} new array to show user with his/her filter
  */
 const changePhotosFilter = (filter, photoElements) => {
-  if (filter.id === 'filter-default') {
-    return photoElements;
-  }
-  if (filter.id === 'filter-random') {
-    return shuffle(photoElements.slice()).slice(0, NUMBER_RANDOM_PHOTOS);
-  }
-  if (filter.id === 'filter-discussed') {
-    return photoElements.slice().sort(compareCountComments);
-  }
+  const filters = {
+    'filter-default': () => photoElements,
+    'filter-random': () => shuffle(photoElements.slice()).slice(0, NUMBER_RANDOM_PHOTOS),
+    'filter-discussed': () => photoElements.slice().sort(compareCountComments)
+  };
+
+  return filters[filter.id]();
 };
 
 /**
@@ -41,8 +39,8 @@ const addUpdatePreviewsFilterHandler = (photoElements, createNewPreviews) => {
 
   filterForm.addEventListener('click', (evt) => {
     const filter = evt.target.closest('.img-filters__button');
-    if (!filter) {return photoElements;}
-    if (!filterContainer.contains(filter)) {return photoElements;}
+    if (!filter) {return;}
+    if (!filterContainer.contains(filter)) {return;}
 
     for (let i = 0; i < buttonsFilter.length; i++) {
       buttonsFilter[i].classList.remove('img-filters__button--active');
